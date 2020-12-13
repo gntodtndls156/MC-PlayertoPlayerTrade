@@ -21,6 +21,7 @@ public class PlayerToPlayerTrade implements CommandExecutor {
     }
     private boolean OnlinePlayerCheck(String name) {
         for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+            System.out.println(player.getName() + name);
             if (name.equals(player.getName()))
                 return true;
         }

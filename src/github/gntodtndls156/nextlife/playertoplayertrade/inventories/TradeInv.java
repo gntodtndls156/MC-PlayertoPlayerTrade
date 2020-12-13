@@ -120,7 +120,7 @@ public class TradeInv implements Listener {
         }
         if (getPlayer1().isSneaking()) {
             if (getPlayer2().getType() == EntityType.PLAYER) {
-                TextComponent ACCEPT = new TextComponent("Accept");
+                TextComponent ACCEPT = new TextComponent("Accept ");
                 ACCEPT.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/PlayerToPlayerTrade " + getPlayer1() + " " + getPlayer2()));
                 ACCEPT.setBold(true);
                 ACCEPT.setColor(ChatColor.GREEN);
@@ -130,8 +130,13 @@ public class TradeInv implements Listener {
                 DENY.setBold(true);
                 DENY.setColor(ChatColor.RED);
 
+                TextComponent TEXT = new TextComponent(getPlayer1().getName() + "로부터 1대1 거래 신청받았습니다. ");
+                TEXT.addExtra(ACCEPT);
+                TEXT.addExtra(DENY);
+
                 getPlayer1().sendMessage(getPlayer2().getName() + "에게 1대1 거래 신청했습니다.");
-                getPlayer2().sendMessage(getPlayer1().getName() + "로부터 1대1 거래 신청받았습니다. " + ACCEPT + " " + DENY);
+                getPlayer2().spigot().sendMessage(TEXT);
+                // getPlayer2().sendMessage(getPlayer1().getName() + "로부터 1대1 거래 신청받았습니다. " + ACCEPT + " " + DENY);
 
                         /* Timer timer = new Timer();
                         TimerTask timerTask = new TimerTask() {

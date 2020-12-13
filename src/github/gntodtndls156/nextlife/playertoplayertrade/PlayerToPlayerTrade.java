@@ -16,7 +16,7 @@ public class PlayerToPlayerTrade extends JavaPlugin {
         log.info("[Player To Player Trade] " + Message);
     }
 
-    public static Economy economy;
+    // public static Economy economy;
 
     @Override
     public void onDisable() {
@@ -36,7 +36,7 @@ public class PlayerToPlayerTrade extends JavaPlugin {
             }
             getServer().getPluginManager().disablePlugin(this);
         } else {
-            economy = getServer().getServicesManager().getRegistration(Economy.class).getProvider();
+            // economy = getServer().getServicesManager().getRegistration(Economy.class).getProvider();
         }
         msg("Vault Plugin Success to Check");
 
