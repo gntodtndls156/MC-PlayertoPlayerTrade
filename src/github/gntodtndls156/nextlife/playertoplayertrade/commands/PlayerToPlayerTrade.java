@@ -1,5 +1,6 @@
 package github.gntodtndls156.nextlife.playertoplayertrade.commands;
 
+import github.gntodtndls156.nextlife.playertoplayertrade.inventories.TradeInv;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,7 +12,10 @@ public class PlayerToPlayerTrade implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         // PlayerToPlayerTrade
         if (OnlinePlayerCheck(strings[0])) {
-
+            if (OnlinePlayerCheck(strings[1])) {
+                new TradeInv(strings[0], strings[1]);
+                return true;
+            }
         }
         return false;
     }

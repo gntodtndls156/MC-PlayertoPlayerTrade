@@ -4,6 +4,3 @@ main: github.gntodtndls156.nextlife.playertoplayertrade.PlayerToPlayerTrade
 api-version: 1.12.2
 version: 0.1
 depend: [Vault]
-commands:
-  playertoplayertrade:
-    description: 플레이어간의 거래

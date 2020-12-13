@@ -1,5 +1,6 @@
 package github.gntodtndls156.nextlife.playertoplayertrade;
 
+import github.gntodtndls156.nextlife.playertoplayertrade.inventories.TradeInv;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -12,7 +13,7 @@ import java.util.logging.Logger;
 public class PlayerToPlayerTrade extends JavaPlugin {
     public static void msg(String Message) {
         Logger log = Bukkit.getLogger();
-        log.info(Message);
+        log.info("[Player To Player Trade] " + Message);
     }
 
     public static Economy economy;
@@ -25,6 +26,7 @@ public class PlayerToPlayerTrade extends JavaPlugin {
     @Override
     public void onEnable() {
         super.onEnable();
+        msg("Vault Plugin Check");
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             msg("NOT HAVE THE PLUGIN (Vault).");
             try {
@@ -36,5 +38,8 @@ public class PlayerToPlayerTrade extends JavaPlugin {
         } else {
             economy = getServer().getServicesManager().getRegistration(Economy.class).getProvider();
         }
+        msg("Vault Plugin Success to Check");
+
+        getServer().getPluginManager().registerEvents(new TradeInv(), this);
     }
 }

@@ -21,11 +21,11 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.Arrays;
 
 
-public class TradeInv1 implements Listener {
+public class TradeInv implements Listener {
     Inventory inv1, inv2;
     Player player1, player2;
 
-    public TradeInv1(String $player1, String $player2) {
+    public TradeInv(String $player1, String $player2) {
         setPlayer1(Bukkit.getPlayer($player1));
         setPlayer2(Bukkit.getPlayer($player2));
         setInv1(baseFrame());
@@ -33,6 +33,7 @@ public class TradeInv1 implements Listener {
         getPlayer1().openInventory(getInv1());
         getPlayer2().openInventory(getInv2());
     }
+    public TradeInv(){}
 
     public Player getPlayer2() {
         return player2;
