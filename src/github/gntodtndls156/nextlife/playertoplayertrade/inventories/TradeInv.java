@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -122,7 +123,6 @@ public class TradeInv implements Listener {
             ItemStack[] eventInventoryItems = event.getInventory().getContents();
             ItemStack[] playerInventoryItems = player.getInventory().getContents();
             int[] Slot = new int[] {0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
-
             if (event.isShiftClick()) {
                 event.setCancelled(true);
             }
@@ -138,6 +138,7 @@ public class TradeInv implements Listener {
                             for(int i = 0; i <= 35; i++) {
                                 if (playerInventoryItems[i] == null) {
                                     player.getInventory().setItem(i, event.getCurrentItem());
+                                    getInv2().setItem(event.getSlot() + 5, new ItemStack(Material.AIR));
                                     event.getInventory().setItem(event.getSlot(), new ItemStack(Material.AIR));
                                     break;
                                 }
@@ -148,6 +149,7 @@ public class TradeInv implements Listener {
                         for(int i = 0; i < Slot.length; i++) {
                             if (eventInventoryItems[Slot[i]] == null) {
                                 event.getInventory().setItem(Slot[i], event.getCurrentItem());
+                                getInv2().setItem(Slot[i] + 5, event.getCurrentItem());
                                 player.getInventory().setItem(event.getSlot(), new ItemStack(Material.AIR));
                                 break;
                             }
@@ -171,6 +173,14 @@ public class TradeInv implements Listener {
         SKULL.remove(player.getName());
     }
 
+    // register Event - When Close Inventory, other Inventory close at the same time.
+    @EventHandler
+    public void onTradeInventoryClosing(InventoryCloseEvent event) {
+        if (event.getInventory().getTitle().equals("Player To Player Trade")) {
+            getPlayer2().closeInventory();
+            getPlayer1().closeInventory();
+        }
+    }
     // register Event - Player Sneaking and Right click
     @EventHandler
     public void onPlayerSneakingAndRightClick(PlayerInteractEntityEvent event) {

@@ -27,39 +27,4 @@ public class CommandTrade implements CommandExecutor {
         return false;
 
     }
-
-
 }
-
-/*
-
-if (event.isLeftClick()) {
-        int inventorySlot = event.getRawSlot();
-        event.setCancelled(true);
-        if (inventorySlot > 53) {
-        ItemStack[] SlotItem = event.getInventory().getContents();
-        int [] Slot = new int[] {0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
-        for(int i = 0; i < Slot.length; i++) {
-        if (SlotItem[Slot[i]] == null) {
-        event.getInventory().setItem(Slot[i], event.getCurrentItem());
-        event.getInventory().setItem(inventorySlot, new ItemStack(Material.AIR));
-        break;
-        }
-        }
-        } else if (inventorySlot < 4 ||
-        inventorySlot > 8 ||
-        inventorySlot < 13 ||
-        inventorySlot > 17 ||
-        inventorySlot < 22 ||
-        inventorySlot > 26 ||
-        inventorySlot < 31) {
-        ItemStack[] SlotItem = event.getInventory().getContents();
-        for(int i = 54; i < 90; i++) {
-        if (SlotItem[i] == null) {
-        event.getInventory().setItem(i, event.getCurrentItem());
-        event.getInventory().setItem(inventorySlot, new ItemStack(Material.AIR));
-        break;
-        }
-        }
-        }
-        }*/
