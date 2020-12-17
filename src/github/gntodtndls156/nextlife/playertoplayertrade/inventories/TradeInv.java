@@ -3,6 +3,7 @@ package github.gntodtndls156.nextlife.playertoplayertrade.inventories;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.entity.Entity;
@@ -11,13 +12,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.material.Wool;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -46,7 +49,7 @@ public class TradeInv implements Listener {
         INVES.put(player1.getName() + " TO " + player2.getName(), registerTradeInventory(player1, player2));
         return INVES.get(player1.getName() + " TO " + player2.getName());
     }
-    private Inventory getInventory(Player player1, Player player2) {
+    public Inventory getInventory(Player player1, Player player2) {
         return INVES.get(player1.getName() + " TO " + player2.getName());
     }
     // API - register Inventory Base
@@ -63,6 +66,9 @@ public class TradeInv implements Listener {
         }
         inventory.setItem(39, SKULL.get(player1.getName()));
         inventory.setItem(41, SKULL.get(player2.getName()));
+
+        Button button = new Button(getPlayer1(), getPlayer2());
+        inventory.setItem(53, button.createButton1());
 
         return inventory;
     }
@@ -109,8 +115,8 @@ public class TradeInv implements Listener {
             if (event.isLeftClick()) {
                 event.setCancelled(true);
                 int[] canNotClick = new int[] {4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
-                int[] player1Slot = new int[]{0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
-                int[] player2Slot = new int[]{5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 23, 24, 35};
+                int[] player1Slot = new int[] {0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
+                int[] player2Slot = new int[] {5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 23, 24, 35};
                 for (int i = 0; i < canNotClick.length; i++)
                     if (event.getSlot() == canNotClick[i]) {
                         return;
@@ -176,6 +182,32 @@ public class TradeInv implements Listener {
         SKULL.put(player.getName(), createSkull(player));
     }
 
+    public ItemStack createButton1() {
+        ItemStack button = new ItemStack(WoolColors(14));
+        ItemMeta meta = button.getItemMeta();
+
+        meta.setDisplayName("거래 잠그기");
+        meta.setLore(Arrays.asList("이 재화로 거래하자고 제안합니다."));
+        button.setItemMeta(meta);
+        return button;
+    }
+
+    public ItemStack createButton2() {
+        ItemStack button = new ItemStack(WoolColors(11));
+        ItemMeta meta = button.getItemMeta();
+
+        meta.setDisplayName("거래 수락하기");
+        meta.setLore(Arrays.asList("최종적으로 거래를 수락합니다.", "상대방도 수락할 경우 거래가 완료됩니다."));
+        button.setItemMeta(meta);
+        return button;
+    }
+
+    private ItemStack WoolColors(int number) {
+        DyeColor[] colors = DyeColor.values();
+        return new Wool(colors[number]).toItemStack(1);
+        //Wool wool = new Wool(colors[number]);
+    }
+
     public Player getPlayer1() {
         return player1;
     }
@@ -191,6 +223,7 @@ public class TradeInv implements Listener {
     public void setPlayer2(Player player2) {
         this.player2 = player2;
     }
+
 
 
     /*
