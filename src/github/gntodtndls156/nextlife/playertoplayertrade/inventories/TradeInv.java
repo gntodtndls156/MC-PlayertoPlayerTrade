@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Wool;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -158,7 +159,8 @@ public class TradeInv implements Listener {
                 for (int i = 0; i < canNotClick.length; i++)
                     if (event.getSlot() == canNotClick[i]) {
                         return;
-                    }
+                    } else if (event.getCurrentItem().getType() == Material.AIR)
+                        return;
                 switch (event.getClickedInventory().getType()) {
                     case CHEST:
                         if (getPlayer1().getName().equals(event.getWhoClicked().getName())) {
@@ -170,6 +172,7 @@ public class TradeInv implements Listener {
                         } else {
                             event.setCancelled(true);
                         }
+                        lineReset();
                         break;
                     case PLAYER:
                         if (getPlayer1().getName().equals(event.getWhoClicked().getName())) {
@@ -177,6 +180,7 @@ public class TradeInv implements Listener {
                         } else {
                             tradeInventorySlotCheckNull(event, tradeInventoryItems, player2Slot);
                         }
+                        lineReset();
                         break;
                 }
             }
@@ -184,6 +188,19 @@ public class TradeInv implements Listener {
                 event.setCancelled(true);
             }
         }
+    }
+
+    private void lineReset() {
+        setPlayer1State1(false);
+        setPlayer2State1(false);
+        setPlayer2State2(false);
+        setPlayer1State2(false);
+        Bukkit.getScheduler().cancelAllTasks();
+        int[] line = new int[] { 40, 31, 22, 13, 4, 36, 37, 38, 44, 43, 42 };
+        for(int i = 0; i < line.length; i++) {
+            getInventory(getPlayer1(), getPlayer2()).setItem(line[i], new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1));
+        }
+
     }
 
     private void changeLine(int[] line, int color, InventoryClickEvent event) {
