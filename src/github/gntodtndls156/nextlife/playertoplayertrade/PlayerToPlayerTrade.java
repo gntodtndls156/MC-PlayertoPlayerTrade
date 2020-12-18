@@ -1,11 +1,8 @@
 package github.gntodtndls156.nextlife.playertoplayertrade;
 
 import github.gntodtndls156.nextlife.playertoplayertrade.commands.CommandTrade;
-import github.gntodtndls156.nextlife.playertoplayertrade.inventories.Button;
 import github.gntodtndls156.nextlife.playertoplayertrade.inventories.TradeInv;
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -42,11 +39,8 @@ public class PlayerToPlayerTrade extends JavaPlugin {
         }
         msg("Vault Plugin Success to Check");
 
-        getServer().getPluginManager().registerEvents(new TradeInv(), this);
-        getServer().getPluginManager().registerEvents(new Button(), this);
+        getServer().getPluginManager().registerEvents(new TradeInv(this), this);
         Commands();
-        new Button(this);
-
     }
 
     private void Commands() {
