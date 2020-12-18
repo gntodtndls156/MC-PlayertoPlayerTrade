@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
@@ -33,8 +34,10 @@ public class TradeInv implements Listener {
     static Map<String, Inventory> INVES = new HashMap<>();
     static Map<String, ItemStack> SKULL = new HashMap<>();
     Player player1, player2;
-    boolean isPlayer1State1, isPlayer1State2;
-    boolean isPlayer2State1, isPlayer2State2;
+    boolean isPlayer1State1 = false, isPlayer1State2 = false;
+    boolean isPlayer2State1 = false, isPlayer2State2 = false;
+    final int[] player1Slot = new int[]{0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
+    final int[] player2Slot = new int[]{5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 23, 24, 35};
 
     public TradeInv() {
     }
@@ -154,13 +157,12 @@ public class TradeInv implements Listener {
                 }
 
                 int[] canNotClick = new int[]{4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
-                int[] player1Slot = new int[]{0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
-                int[] player2Slot = new int[]{5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 23, 24, 35};
-                for (int i = 0; i < canNotClick.length; i++)
-                    if (event.getSlot() == canNotClick[i]) {
+                for (int i = 0; i < canNotClick.length; i++) {
+                    if (event.getSlot() == canNotClick[i] && event.getClickedInventory().getType() == InventoryType.CHEST) {
                         return;
                     } else if (event.getCurrentItem().getType() == Material.AIR)
                         return;
+                }
                 switch (event.getClickedInventory().getType()) {
                     case CHEST:
                         if (getPlayer1().getName().equals(event.getWhoClicked().getName())) {
@@ -200,6 +202,39 @@ public class TradeInv implements Listener {
         for(int i = 0; i < line.length; i++) {
             getInventory(getPlayer1(), getPlayer2()).setItem(line[i], new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1));
         }
+        getInventory(getPlayer1(), getPlayer2()).setItem(53, createButton1());
+    }
+
+    private void successTrade(InventoryClickEvent event) {
+        int[] line1 = new int[] {42, 43, 44};
+        int[] line2 = new int[] {38, 37, 36};
+        int[] line3 = new int[] { 40, 31, 22, 13, 4 };
+        for(int i = 0; i < 5; i++) {
+            getInventory(getPlayer1(), getPlayer2()).setItem(line3[i], new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1));
+        }
+        for(int i = 1; i <= line1.length; i++) {
+            int finalI = i;
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                getInventory(getPlayer1(), getPlayer2()).setItem(line1[finalI - 1], new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1));
+                getInventory(getPlayer1(), getPlayer2()).setItem(line2[finalI - 1], new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1));
+            }, 7L * i);
+        }
+
+        setPlayer1State1(false);
+        setPlayer2State1(false);
+        setPlayer2State2(false);
+        setPlayer1State2(false);
+        getInventory(getPlayer1(), getPlayer2()).setItem(53, createButton1());
+
+        ItemStack[] tradeInventoryItems = event.getInventory().getContents();
+        ItemStack[] temp = new ItemStack[player1Slot.length];
+        for(int i = 0; i < player2Slot.length; i++) {
+            temp[i] = tradeInventoryItems[player1Slot[i]];
+            tradeInventoryItems[player1Slot[i]] = tradeInventoryItems[player2Slot[i]];
+            tradeInventoryItems[player2Slot[i]] = temp[i];
+            getInventory(getPlayer1(), getPlayer2()).setItem(player1Slot[i], tradeInventoryItems[player1Slot[i]]);
+            getInventory(getPlayer1(), getPlayer2()).setItem(player2Slot[i], tradeInventoryItems[player2Slot[i]]);
+        }
 
     }
 
@@ -208,21 +243,41 @@ public class TradeInv implements Listener {
             int finalI = i;
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 TradeInv.INVES.get(getPlayer1().getName() + " TO " + getPlayer2().getName()).setItem(line[finalI - 1], new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) color));
-                if (event.getWhoClicked().getName().equals(getPlayer1().getName()) && finalI == line.length) {
+                if (event.getWhoClicked().getName().equals(getPlayer1().getName()) && finalI == line.length && event.getCurrentItem().getItemMeta().getDisplayName().equals("거래 잠그기")) {
                     setPlayer1State1(true);
-                } else if (event.getWhoClicked().getName().equals(getPlayer2().getName()) && finalI == line.length) {
+                } else if (event.getWhoClicked().getName().equals(getPlayer2().getName()) && finalI == line.length && event.getCurrentItem().getItemMeta().getDisplayName().equals("거래 잠그기")) {
                     setPlayer2State1(true);
+                } else if (event.getWhoClicked().getName().equals(getPlayer1().getName()) && finalI == line.length && event.getCurrentItem().getItemMeta().getDisplayName().equals("거래 수락하기")) {
+                    setPlayer1State2(true);
+                } else if (event.getWhoClicked().getName().equals(getPlayer2().getName()) && finalI == line.length && event.getCurrentItem().getItemMeta().getDisplayName().equals("거래 수락하기")) {
+                    setPlayer2State2(true);
                 }
-                if (isPlayer2State1 && isPlayer1State1()) {
-                    int[] line1 = new int[] { 40, 31, 22, 13, 4 };
-                    for(int j = 1; j <= line1.length; j++) {
-                        int finalJ = j;
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                            getInventory(getPlayer1(), getPlayer2()).setItem(line1[finalJ - 1], new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) color));
-                        }, 7L * j);
-                    }
+                System.out.println(isPlayer1State1() + " " + isPlayer1State2() + " " + isPlayer2State1() + " " + isPlayer2State2());
+                if (isPlayer1State2() && isPlayer2State2()) {
+                    System.out.println(isPlayer1State2() + " " + isPlayer2State2());
+                    changeColorSec((short) color, event);
+                } else if (isPlayer2State1() && isPlayer1State1()) {
+                    changeColorSec((short) color, event);
                 }
             }, 7L * i);
+        }
+    }
+
+    private void changeColorSec(short color, InventoryClickEvent event) {
+        int[] line1 = new int[] { 40, 31, 22, 13, 4 };
+        for(int j = 1; j <= line1.length; j++) {
+            int finalJ = j;
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                getInventory(getPlayer1(), getPlayer2()).setItem(line1[finalJ - 1], new ItemStack(Material.STAINED_GLASS_PANE, 1, color));
+                if (finalJ == line1.length) {
+                    getInventory(getPlayer1(), getPlayer2()).setItem(53, createButton2());
+                    setPlayer1State1(false);
+                    if (isPlayer2State2() && isPlayer1State2()) {
+                        successTrade(event);
+
+                    }
+                }
+            }, 7L * j);
         }
     }
 
