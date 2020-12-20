@@ -38,6 +38,9 @@ public class TradeInv implements Listener {
     boolean isPlayer2State1 = false, isPlayer2State2 = false;
     final int[] player1Slot = new int[]{0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
     final int[] player2Slot = new int[]{5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 23, 24, 35};
+    PlayerToPlayerTrade playerToPlayerTrade = new PlayerToPlayerTrade();
+    // double player1Money = playerToPlayerTrade.getEcon().getBalance(getPlayer1()), player2Money = playerToPlayerTrade.getEcon().getBalance(getPlayer2());
+    double player1Money, player2Money;
 
     public TradeInv() {
     }
@@ -58,6 +61,8 @@ public class TradeInv implements Listener {
         // Inventory inventory = INVES.get(player1.getName() + " TO " + player2.getName());
         player1.openInventory(inventory);
         player2.openInventory(inventory);
+        setPlayer1Money(playerToPlayerTrade.getEcon().getBalance(player1));
+        setPlayer2Money(playerToPlayerTrade.getEcon().getBalance(player2));
     }
 
     // API - register Inventory Trade
@@ -86,6 +91,7 @@ public class TradeInv implements Listener {
         inventory.setItem(41, SKULL.get(player2.getName()));
 
         inventory.setItem(53, createButton1());
+        inventory.setItem(45, createMoneyButton());
 
         return inventory;
     }
@@ -138,11 +144,6 @@ public class TradeInv implements Listener {
                         int[] line = new int[]{44, 43, 42};
                         changeLine(line, 12, event);
                     }
-                    if (isPlayer1State1() && isPlayer2State1()) {
-                        //TODO
-
-                        //getInventory(getPlayer1(), getPlayer2()).setItem(53, createButton2());
-                    }
                 } else if (event.getSlot() == 53 && event.getCurrentItem().getItemMeta().getDisplayName().equals("거래 수락하기")) {
                     if (event.getWhoClicked().getName().equals(getPlayer1().getName())) {
                         int[] line = new int[]{36, 37, 38};
@@ -151,9 +152,8 @@ public class TradeInv implements Listener {
                         int[] line = new int[]{44, 43, 42};
                         changeLine(line, 15, event);
                     }
-                    if (isPlayer1State2() && isPlayer2State2()) {
-                        //TODO
-                    }
+                } else if (event.getSlot() == 45 && event.getCurrentItem().getItemMeta().getDisplayName().equals("돈 거래")) {
+                    event.getWhoClicked().openInventory(moneyGUI());
                 }
 
                 int[] canNotClick = new int[]{4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
@@ -190,6 +190,39 @@ public class TradeInv implements Listener {
                 event.setCancelled(true);
             }
         }
+    }
+
+    int money = 0;
+    public Inventory moneyGUI() {
+        Inventory inventory = Bukkit.createInventory(null, 9 * 6, "Add money to trade");
+        ItemStack stoneButton = new ItemStack(Material.STONE_BUTTON, 1);
+        ItemStack woodButton = new ItemStack(Material.WOOD_BUTTON, 1);
+        ItemMeta meta = stoneButton.getItemMeta();
+        ItemStack Coin = new ItemStack(Material.GOLD_NUGGET, 1);
+        int[] count = new int[] {1, 5, 10, 50, 100, 500, 1000};
+        for(int i = 0; i < count.length; i++) {
+            meta.setDisplayName("Add " + count[i] + " Coins");
+            meta.setLore(Arrays.asList("Click to add more", "", count[i] + " Coins will be moved in your Inventory"));
+            stoneButton.setItemMeta(meta);
+
+            inventory.setItem((9 * 2 + 1) + i, stoneButton);
+        }
+        meta = woodButton.getItemMeta();
+        for(int i = 0; i < count.length; i++) {
+            meta.setDisplayName("Remove " + count[i] + " Coins");
+            meta.setLore(Arrays.asList("Click to remove more", "", count[i] + " Coins will be moved in you Inventory"));
+            woodButton.setItemMeta(meta);
+
+            inventory.setItem((9 * 3 + 1) + i, woodButton);
+        }
+        meta = Coin.getItemMeta();
+        meta.setLore(Arrays.asList("You have selected this currency"));
+        meta.setDisplayName(money + "Coins (Selected)");
+        Coin.setItemMeta(meta);
+
+
+        return inventory;
+        //TODO
     }
 
     private void lineReset() {
@@ -335,6 +368,16 @@ public class TradeInv implements Listener {
         return button;
     }
 
+    public ItemStack createMoneyButton() {
+        ItemStack button = new ItemStack(Material.GOLD_NUGGET, 1);
+        ItemMeta meta = button.getItemMeta();
+
+        meta.setDisplayName("돈 거래");
+        meta.setLore(Arrays.asList("돈을 얼만큼 주고 받을지 요구합니다."));
+        button.setItemMeta(meta);
+        return button;
+    }
+
     private ItemStack WoolColors(int number) {
         DyeColor[] colors = DyeColor.values();
         return new Wool(colors[number]).toItemStack(1);
@@ -387,5 +430,21 @@ public class TradeInv implements Listener {
 
     public void setPlayer2State2(boolean player2State2) {
         isPlayer2State2 = player2State2;
+    }
+
+    public double getPlayer1Money() {
+        return player1Money;
+    }
+
+    public double getPlayer2Money() {
+        return player2Money;
+    }
+
+    public void setPlayer1Money(double player1Money) {
+        this.player1Money = player1Money;
+    }
+
+    public void setPlayer2Money(double player2Money) {
+        this.player2Money = player2Money;
     }
 }
