@@ -31,7 +31,7 @@ import java.util.stream.IntStream;
 
 
 public class TradeInv implements Listener {
-    static Map<String, Inventory> INVES = new HashMap<>();
+    static Map<String, Inventory> INVES = new HashMap<>(); d
     static Map<String, ItemStack> SKULL = new HashMap<>();
     Player player1, player2;
     boolean isPlayer1State1 = false, isPlayer1State2 = false;
@@ -76,7 +76,7 @@ public class TradeInv implements Listener {
     }
 
     // API - register Inventory Base
-    private Inventory registerTradeInventory(Player player1, Player player2) {
+    private Inventory registerTradeInventory(Player player1, Player player2) { d
         Inventory inventory = Bukkit.createInventory(null, 9 * 6, "Player To Player Trade");
 
         ItemStack line = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1);
@@ -97,7 +97,7 @@ public class TradeInv implements Listener {
     }
 
     // API - Create Skull
-    private static ItemStack createSkull(Player player) {
+    private static ItemStack createSkull(Player player) { d
         ItemStack item = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
         SkullMeta meta = (SkullMeta) item.getItemMeta();
 
@@ -156,9 +156,9 @@ public class TradeInv implements Listener {
                     event.getWhoClicked().openInventory(moneyGUI());
                 }
 
-                int[] canNotClick = new int[]{4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
+                int[] canNotClick = new int[]{4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53}; d
                 for (int i = 0; i < canNotClick.length; i++) {
-                    if (event.getSlot() == canNotClick[i] && event.getClickedInventory().getType() == InventoryType.CHEST) {
+                    if (event.getSlot() == canNotClick[i] && event.getClickedInventory().getType() == InventoryType.CHEST) { d
                         return;
                     } else if (event.getCurrentItem().getType() == Material.AIR)
                         return;
@@ -336,7 +336,7 @@ public class TradeInv implements Listener {
 
     // Event - SKULL
     @EventHandler
-    public void PlayerJoinSKULL(PlayerJoinEvent event) {
+    public void PlayerJoinSKULL(PlayerJoinEvent event) { d
         Player player = event.getPlayer();
 //        Iterator<String> keys = SKULL.keySet().iterator();
 //        while(keys.hasNext()) {
