@@ -2,10 +2,8 @@ package github.gntodtndls156.nextlife.playertoplayertrade;
 
 import github.gntodtndls156.nextlife.playertoplayertrade.commands.CommandTrade;
 import github.gntodtndls156.nextlife.playertoplayertrade.inventories.TradeInv;
-import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,6 +21,10 @@ public class PlayerToPlayerTrade extends JavaPlugin {
         return econ;
     }
 
+    public void setEcon(Economy econ) {
+        this.econ = econ;
+    }
+
     @Override
     public void onDisable() {
         super.onDisable();
@@ -33,11 +35,11 @@ public class PlayerToPlayerTrade extends JavaPlugin {
         super.onEnable();
         msg("Vault Plugin Check");
 
-        if(!setupEconomy()) {
-            msg("Vault Plugin no found! Player To Player Trade Plugin is Shutdown. ");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
+//        if(!setupEconomy()) {
+//            msg("Player To Player Trade Plugin Shutdown.");
+//            getServer().getPluginManager().disablePlugin(this);
+//            return;
+//        }
 
         msg("Vault Plugin Success to Check");
 
@@ -51,13 +53,15 @@ public class PlayerToPlayerTrade extends JavaPlugin {
 
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            msg("Vault Plugin no found! ");
             return false;
         }
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
-        }
-        econ = rsp.getProvider();
+//        if (rsp == null) {
+//            System.out.println("Vault Plugin not found class! ");
+//            return false;
+//        }
+        setEcon(econ = rsp.getProvider());
         return econ != null;
     }
 }

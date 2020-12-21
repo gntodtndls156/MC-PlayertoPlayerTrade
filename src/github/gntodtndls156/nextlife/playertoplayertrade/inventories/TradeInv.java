@@ -31,7 +31,7 @@ import java.util.stream.IntStream;
 
 
 public class TradeInv implements Listener {
-    static Map<String, Inventory> INVES = new HashMap<>(); d
+    static Map<String, Inventory> INVES = new HashMap<>();
     static Map<String, ItemStack> SKULL = new HashMap<>();
     Player player1, player2;
     boolean isPlayer1State1 = false, isPlayer1State2 = false;
@@ -41,6 +41,38 @@ public class TradeInv implements Listener {
     PlayerToPlayerTrade playerToPlayerTrade = new PlayerToPlayerTrade();
     // double player1Money = playerToPlayerTrade.getEcon().getBalance(getPlayer1()), player2Money = playerToPlayerTrade.getEcon().getBalance(getPlayer2());
     double player1Money, player2Money;
+
+    int money = 0;
+    public Inventory moneyGUI() {
+        Inventory inventory = Bukkit.createInventory(null, 9 * 6, "Add money to trade");
+        ItemStack stoneButton = new ItemStack(Material.STONE_BUTTON, 1);
+        ItemStack woodButton = new ItemStack(Material.WOOD_BUTTON, 1);
+        ItemMeta meta = stoneButton.getItemMeta();
+        ItemStack Coin = new ItemStack(Material.GOLD_NUGGET, 1);
+        int[] count = new int[] {1, 5, 10, 50, 100, 500, 1000};
+        for(int i = 0; i < count.length; i++) {
+            meta.setDisplayName("Add " + count[i] + " Coins");
+            meta.setLore(Arrays.asList("Click to add more", "", count[i] + " Coins will be moved in your Inventory"));
+            stoneButton.setItemMeta(meta);
+
+            inventory.setItem((9 * 2 + 1) + i, stoneButton);
+        }
+        meta = woodButton.getItemMeta();
+        for(int i = 0; i < count.length; i++) {
+            meta.setDisplayName("Remove " + count[i] + " Coins");
+            meta.setLore(Arrays.asList("Click to remove more", "", count[i] + " Coins will be moved in you Inventory"));
+            woodButton.setItemMeta(meta);
+
+            inventory.setItem((9 * 3 + 1) + i, woodButton);
+        }
+        meta = Coin.getItemMeta();
+        meta.setLore(Arrays.asList("You have selected this currency"));
+        meta.setDisplayName(money + "Coins (Selected)");
+        Coin.setItemMeta(meta);
+
+        return inventory;
+        //TODO
+    }
 
     public TradeInv() {
     }
@@ -76,7 +108,7 @@ public class TradeInv implements Listener {
     }
 
     // API - register Inventory Base
-    private Inventory registerTradeInventory(Player player1, Player player2) { d
+    private Inventory registerTradeInventory(Player player1, Player player2) {
         Inventory inventory = Bukkit.createInventory(null, 9 * 6, "Player To Player Trade");
 
         ItemStack line = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1);
@@ -92,12 +124,11 @@ public class TradeInv implements Listener {
 
         inventory.setItem(53, createButton1());
         inventory.setItem(45, createMoneyButton());
-
         return inventory;
     }
 
     // API - Create Skull
-    private static ItemStack createSkull(Player player) { d
+    private static ItemStack createSkull(Player player) {
         ItemStack item = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
         SkullMeta meta = (SkullMeta) item.getItemMeta();
 
@@ -156,9 +187,9 @@ public class TradeInv implements Listener {
                     event.getWhoClicked().openInventory(moneyGUI());
                 }
 
-                int[] canNotClick = new int[]{4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53}; d
+                int[] canNotClick = new int[]{4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
                 for (int i = 0; i < canNotClick.length; i++) {
-                    if (event.getSlot() == canNotClick[i] && event.getClickedInventory().getType() == InventoryType.CHEST) { d
+                    if (event.getSlot() == canNotClick[i] && event.getClickedInventory().getType() == InventoryType.CHEST) {
                         return;
                     } else if (event.getCurrentItem().getType() == Material.AIR)
                         return;
@@ -192,38 +223,7 @@ public class TradeInv implements Listener {
         }
     }
 
-    int money = 0;
-    public Inventory moneyGUI() {
-        Inventory inventory = Bukkit.createInventory(null, 9 * 6, "Add money to trade");
-        ItemStack stoneButton = new ItemStack(Material.STONE_BUTTON, 1);
-        ItemStack woodButton = new ItemStack(Material.WOOD_BUTTON, 1);
-        ItemMeta meta = stoneButton.getItemMeta();
-        ItemStack Coin = new ItemStack(Material.GOLD_NUGGET, 1);
-        int[] count = new int[] {1, 5, 10, 50, 100, 500, 1000};
-        for(int i = 0; i < count.length; i++) {
-            meta.setDisplayName("Add " + count[i] + " Coins");
-            meta.setLore(Arrays.asList("Click to add more", "", count[i] + " Coins will be moved in your Inventory"));
-            stoneButton.setItemMeta(meta);
 
-            inventory.setItem((9 * 2 + 1) + i, stoneButton);
-        }
-        meta = woodButton.getItemMeta();
-        for(int i = 0; i < count.length; i++) {
-            meta.setDisplayName("Remove " + count[i] + " Coins");
-            meta.setLore(Arrays.asList("Click to remove more", "", count[i] + " Coins will be moved in you Inventory"));
-            woodButton.setItemMeta(meta);
-
-            inventory.setItem((9 * 3 + 1) + i, woodButton);
-        }
-        meta = Coin.getItemMeta();
-        meta.setLore(Arrays.asList("You have selected this currency"));
-        meta.setDisplayName(money + "Coins (Selected)");
-        Coin.setItemMeta(meta);
-
-
-        return inventory;
-        //TODO
-    }
 
     private void lineReset() {
         setPlayer1State1(false);
@@ -268,7 +268,6 @@ public class TradeInv implements Listener {
             getInventory(getPlayer1(), getPlayer2()).setItem(player1Slot[i], tradeInventoryItems[player1Slot[i]]);
             getInventory(getPlayer1(), getPlayer2()).setItem(player2Slot[i], tradeInventoryItems[player2Slot[i]]);
         }
-
     }
 
     private void changeLine(int[] line, int color, InventoryClickEvent event) {
@@ -336,7 +335,7 @@ public class TradeInv implements Listener {
 
     // Event - SKULL
     @EventHandler
-    public void PlayerJoinSKULL(PlayerJoinEvent event) { d
+    public void PlayerJoinSKULL(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 //        Iterator<String> keys = SKULL.keySet().iterator();
 //        while(keys.hasNext()) {
