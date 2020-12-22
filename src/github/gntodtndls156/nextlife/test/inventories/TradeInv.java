@@ -1,6 +1,7 @@
 package github.gntodtndls156.nextlife.test.inventories;
 
 import github.gntodtndls156.nextlife.test.InitPlayer;
+import github.gntodtndls156.nextlife.test.TradeMain;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -25,13 +27,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-public class TradeInv {
+public class TradeInv implements Listener {
     public static Map<String, Inventory> INVENTORY = new HashMap<>();
-    private boolean[] checks = new boolean[4];
-    final Player playerMe, playerYou;
+    private final boolean[] checks = new boolean[4];
+    Player playerMe, playerYou;
 
     final int[] player1Slot = new int[]{0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
     final int[] player2Slot = new int[]{5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 23, 24, 35};
+
+    TradeMain plugin;
+    public TradeInv(TradeMain plugin) {
+        setPlugin(plugin);
+    }
 
     public Inventory registerInventory() {
         Inventory inventory = Bukkit.createInventory(null, 9 * 6, "Player To Player Trade");
@@ -148,13 +155,24 @@ public class TradeInv {
     }
 
     // TODO - when To success, change the trade inventory between players
-    private void inventoryTradeSuccess() {
+    private void inventoryTradeSuccess(InventoryClickEvent evnet) { // 미완성
+        int[] line1 = new int[]{42, 43, 44};
+        int[] line2 = new int[]{38, 37, 36};
+        int[] line3 = new int[]{40, 31, 22, 13, 4};
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            for (int i = 0; i < 5; i++) {
+                INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(line3[i], new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1));
+            }
+            // TODO: Line 248~
+        }, 10L);
 
     }
+
     // TODO - function change Line
     private void changeLine() {
 
     }
+    // TODO - function change Line 2
 
     // TODO - function money inventory
     /*private void registerInventory() {
@@ -169,7 +187,7 @@ public class TradeInv {
         }
         int[] canNotClick = new int[]{4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
         if (Arrays.stream(canNotClick).anyMatch(x -> x == event.getSlot()) || event.getCurrentItem().getType() == Material.AIR) {
-            return;
+            event.setCancelled(true);
         }
     }
 
@@ -204,5 +222,9 @@ public class TradeInv {
 
     public Player getPlayerMe() {
         return playerMe;
+    }
+
+    public void setPlugin(TradeMain plugin) {
+        this.plugin = plugin;
     }
 }
