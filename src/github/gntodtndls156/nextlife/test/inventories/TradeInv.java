@@ -23,6 +23,7 @@ import org.bukkit.material.Wool;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class TradeInv {
     public static Map<String, Inventory> INVENTORY = new HashMap<>();
@@ -32,7 +33,7 @@ public class TradeInv {
     final int[] player1Slot = new int[]{0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
     final int[] player2Slot = new int[]{5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 23, 24, 35};
 
-    private Inventory registerInventory() {
+    public Inventory registerInventory() {
         Inventory inventory = Bukkit.createInventory(null, 9 * 6, "Player To Player Trade");
         ItemStack line = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1);
         for (int i = 0; i < 9; i++) {
@@ -46,8 +47,13 @@ public class TradeInv {
         inventory.setItem(41, InitPlayer.PLAYER_SKULL.get(getPlayerYou().getName()));
 
         inventory.setItem(53, ButtonLock(1));
-        inventory.setItem(45, createMoneyButton());
+        inventory.setItem(45, ButtonMoney());
         return inventory;
+    }
+
+    public void openInventory(Inventory inventory) {
+        getPlayerMe().openInventory(inventory);
+        getPlayerYou().openInventory(inventory);
     }
 
     public TradeInv(Player playerMe, Player playerYou) {
@@ -79,28 +85,79 @@ public class TradeInv {
         //Wool wool = new Wool(colors[number]);
     }
 
+    private ItemStack ButtonMoney() {
+        ItemStack item = new ItemStack(Material.GOLD_NUGGET, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName("돈 거래");
+        meta.setLore(Arrays.asList("돈을 얼만큼 주고 받을지 요구합니다."));
+
+        item.setItemMeta(meta);
+        return item;
+    }
+
     // EVENTS
     @EventHandler
     public void onClickInventoryType(InventoryClickEvent event) {
+        String player = event.getWhoClicked().getName();
         // TODO line 197
         switch (event.getClickedInventory().getType()) {
             case CHEST:
+                if (getPlayerMe().getName().equals(player)) {
+                    getPlayerInventorySlotNullCheck(event, player1Slot);
+                } else if (getPlayerYou().getName().equals(player)) {
+                    getPlayerInventorySlotNullCheck(event, player2Slot);
+                }
                 break;
             case PLAYER:
+                if (getPlayerMe().getName().equals(player)) {
+                    getTradeInventorySlotNullCheck(event, player1Slot);
+                } else if (getPlayerYou().getName().equals(player)) {
+                    getTradeInventorySlotNullCheck(event, player2Slot);
+                }
                 break;
         }
     }
 
+    // APIS
+    private void getPlayerInventorySlotNullCheck(InventoryClickEvent event, int[] playerSlot) {
+        for(int i = 0; i <= 35; i++) {
+            if (event.getWhoClicked().getInventory().getContents()[i] == null && IntStream.of(playerSlot).anyMatch(n -> event.getSlot() == n)) {
+                event.getWhoClicked().getInventory().setItem(i, event.getCurrentItem());
+                INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(event.getSlot(), new ItemStack(Material.AIR));
+                break;
+            }
+        }
+    }
+    private void getTradeInventorySlotNullCheck(InventoryClickEvent event, int[] playerSlot) {
+        for(int i = 0; i < playerSlot.length; i++) {
+            if (event.getInventory().getContents()[playerSlot[i]] == null) {
+                INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(playerSlot[i], event.getCurrentItem());
+                event.getWhoClicked().getInventory().setItem(event.getSlot(), new ItemStack(Material.AIR));
+            }
+        }
+    }
+
     // TODO - reset Inventory
+    private void inventoryReset() {
+
+    }
 
     // TODO - when To success, change the trade inventory between players
+    private void inventoryTradeSuccess() {
 
+    }
     // TODO - function change Line
+    private void changeLine() {
+
+    }
 
     // TODO - function money inventory
-
+    /*private void registerInventory() {
+        should do to make a class that about money.
+    }*/
     // TODO - need to connect the money plugin that Vault plugin or EssentialsX plugin
-
+    
     @EventHandler
     public void onCanNotClick(InventoryClickEvent event) {
         if (event.isShiftClick()) {

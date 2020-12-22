@@ -1,5 +1,6 @@
 package github.gntodtndls156.nextlife.test;
 
+import github.gntodtndls156.nextlife.test.inventories.TradeInv;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -10,8 +11,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -22,12 +26,24 @@ import java.util.Map;
 public class InitPlayer {
     public static Map<String, ItemStack> PLAYER_SKULL = new HashMap<>();
     Player playerMe, playerYou;
+    TradeInv tradeInv;
+
+    public InitPlayer() {
+        tradeInv = new TradeInv(getPlayerMe(), getPlayerYou());
+        Inventory inventory = TradeInv.INVENTORY.put(getPlayerMe().getName() + getPlayerYou().getName(), tradeInv.registerInventory());
+
+        tradeInv.openInventory(inventory);
+    }
 
     // EVENTS
 
+    @EventHandler
+    public void onCloseTradeInventory(InventoryCloseEvent event) {
+        Inventory inventory = TradeInv.INVENTORY.remove(getPlayerMe().getName() + getPlayerYou().getName());
+    }
 
     @EventHandler
-    public void PlayerToPlayerEvent(PlayerInteractEntityEvent event) {
+    public void onPlayerToPlayerEvent(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
         Entity entity = event.getRightClicked();
 
@@ -46,7 +62,7 @@ public class InitPlayer {
     }
 
     @EventHandler
-    public void setPlayerSkull(PlayerJoinEvent event) {
+    public void onSetPlayerSkull(PlayerJoinEvent event) {
         Thread thread = new Thread(() -> {
             Player player = event.getPlayer();
             Iterator<String> keys = PLAYER_SKULL.keySet().iterator();
@@ -70,6 +86,14 @@ public class InitPlayer {
         });
 
         thread.start();
+    }
+
+    @EventHandler
+    public void onRemovePlayerSkull(PlayerQuitEvent event) {
+        String player = event.getPlayer().getName();
+        if(PLAYER_SKULL.get(player) != null) {
+            PLAYER_SKULL.remove(player);
+        }
     }
 
     public Player getPlayerMe() {
