@@ -100,7 +100,6 @@ public class TradeInv {
     @EventHandler
     public void onClickInventoryType(InventoryClickEvent event) {
         String player = event.getWhoClicked().getName();
-        // TODO line 197
         switch (event.getClickedInventory().getType()) {
             case CHEST:
                 if (getPlayerMe().getName().equals(player)) {
@@ -140,7 +139,12 @@ public class TradeInv {
 
     // TODO - reset Inventory
     private void inventoryReset() {
-
+        Arrays.fill(checks, false);
+        // TODO: Bukkit.getScheduler().cancelTask(1);
+        int[] line = new int[] { 40, 31, 22, 13 ,4 ,36, 37, 38, 44, 43, 42 };
+        for(int i = 0; i < line.length; i++)
+            INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(line[i], new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1));
+        INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(53, ButtonLock( 1));
     }
 
     // TODO - when To success, change the trade inventory between players
@@ -157,7 +161,7 @@ public class TradeInv {
         should do to make a class that about money.
     }*/
     // TODO - need to connect the money plugin that Vault plugin or EssentialsX plugin
-    
+
     @EventHandler
     public void onCanNotClick(InventoryClickEvent event) {
         if (event.isShiftClick()) {
