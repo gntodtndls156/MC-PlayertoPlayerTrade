@@ -32,8 +32,8 @@ public class TradeInv implements Listener {
     private final boolean[] checks = new boolean[4];
     Player playerMe, playerYou;
 
-    final int[] player1Slot = new int[]{0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
-    final int[] player2Slot = new int[]{5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 23, 24, 35};
+    final int[] playerMeSlot = new int[]{0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
+    final int[] playerYouSlot = new int[]{5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 23, 24, 35};
 
     TradeMain plugin;
     public TradeInv(TradeMain plugin) {
@@ -110,16 +110,16 @@ public class TradeInv implements Listener {
         switch (event.getClickedInventory().getType()) {
             case CHEST:
                 if (getPlayerMe().getName().equals(player)) {
-                    getPlayerInventorySlotNullCheck(event, player1Slot);
+                    getPlayerInventorySlotNullCheck(event, playerMeSlot);
                 } else if (getPlayerYou().getName().equals(player)) {
-                    getPlayerInventorySlotNullCheck(event, player2Slot);
+                    getPlayerInventorySlotNullCheck(event, playerYouSlot);
                 }
                 break;
             case PLAYER:
                 if (getPlayerMe().getName().equals(player)) {
-                    getTradeInventorySlotNullCheck(event, player1Slot);
+                    getTradeInventorySlotNullCheck(event, playerMeSlot);
                 } else if (getPlayerYou().getName().equals(player)) {
-                    getTradeInventorySlotNullCheck(event, player2Slot);
+                    getTradeInventorySlotNullCheck(event, playerYouSlot);
                 }
                 break;
         }
@@ -144,7 +144,6 @@ public class TradeInv implements Listener {
         }
     }
 
-    // TODO - reset Inventory
     private void inventoryReset() {
         Arrays.fill(checks, false);
         // TODO: Bukkit.getScheduler().cancelTask(1);
@@ -154,18 +153,37 @@ public class TradeInv implements Listener {
         INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(53, ButtonLock( 1));
     }
 
-    // TODO - when To success, change the trade inventory between players
-    private void inventoryTradeSuccess(InventoryClickEvent evnet) { // 미완성
+    // TODO changeColorSec에서 사용함.
+    private void inventoryTradeSuccess(InventoryClickEvent event) {
         int[] line1 = new int[]{42, 43, 44};
         int[] line2 = new int[]{38, 37, 36};
-        int[] line3 = new int[]{40, 31, 22, 13, 4};
+        ItemStack line = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 4);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            for (int i = 0; i < 5; i++) {
-                INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(line3[i], new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1));
+            inventoryReset();
+            for(int i = 0; i < 3; i++) {
+                INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(line1[i], line);
+                INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(line2[i], line);
             }
-            // TODO: Line 248~
-        }, 10L);
+            for(int i = 0; i < 3; i++) {
+                int finalI = i;
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(line1[finalI], line);
+                    INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(line2[finalI], line);
+                }, (1 + i) * 7L);
+            }
+            INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(53, ButtonLock(1));
 
+            ItemStack[] toPlayer = event.getInventory().getContents();
+            ItemStack[] temp = new ItemStack[16];
+            for(int i = 0; i < 16; i++) {
+                temp[i] = toPlayer[playerMeSlot[i]];
+                toPlayer[playerMeSlot[i]] = toPlayer[playerYouSlot[i]];
+                toPlayer[playerYouSlot[i]] = temp[i];
+
+                INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(playerYouSlot[i], toPlayer[playerYouSlot[i]]);
+                INVENTORY.get(getPlayerYou().getName() + getPlayerYou().getName()).setItem(playerMeSlot[i], toPlayer[playerMeSlot[i]]);
+            }
+        }, 3L);
     }
 
     // TODO - function change Line
