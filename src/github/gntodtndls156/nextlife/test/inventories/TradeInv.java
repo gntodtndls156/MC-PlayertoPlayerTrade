@@ -105,7 +105,14 @@ public class TradeInv implements Listener {
 
     // EVENTS
     @EventHandler
-    public void onClickInventoryType(InventoryClickEvent event) {
+    public void onInventoryClickAtTradeInv(InventoryClickEvent event) {
+        if (event.getInventory().getTitle().equals("Player To Player Trade")) {
+            // Can not to Click on the Slot
+            // TODO - Event 정리
+        }
+    }
+    @EventHandler
+    public void onClickInventoryType(InventoryClickEvent event) { // TODO - 삭제
         String player = event.getWhoClicked().getName();
         switch (event.getClickedInventory().getType()) {
             case CHEST:
@@ -122,6 +129,17 @@ public class TradeInv implements Listener {
                     getTradeInventorySlotNullCheck(event, playerYouSlot);
                 }
                 break;
+        }
+    }
+
+    // @EventHandler
+    public void onCanNotClick(InventoryClickEvent event) { // TODO - 삭제
+        if (event.isShiftClick()) {
+            event.setCancelled(true);
+        }
+        int[] canNotClick = new int[]{4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
+        if (Arrays.stream(canNotClick).anyMatch(x -> x == event.getSlot()) || event.getCurrentItem().getType() == Material.AIR) {
+            event.setCancelled(true);
         }
     }
 
@@ -155,20 +173,20 @@ public class TradeInv implements Listener {
 
     // TODO changeColorSec에서 사용함.
     private void inventoryTradeSuccess(InventoryClickEvent event) {
-        int[] line1 = new int[]{42, 43, 44};
-        int[] line2 = new int[]{38, 37, 36};
+        final int[] lineLeft = new int[]{42, 43, 44};
+        final int[] lineRight = new int[]{38, 37, 36};
         ItemStack line = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 4);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             inventoryReset();
             for(int i = 0; i < 3; i++) {
-                INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(line1[i], line);
-                INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(line2[i], line);
+                INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(lineLeft[i], line);
+                INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(lineRight[i], line);
             }
             for(int i = 0; i < 3; i++) {
                 int finalI = i;
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(line1[finalI], line);
-                    INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(line2[finalI], line);
+                    INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(lineLeft[finalI], line);
+                    INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(lineRight[finalI], line);
                 }, (1 + i) * 7L);
             }
             INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName()).setItem(53, ButtonLock(1));
@@ -188,6 +206,8 @@ public class TradeInv implements Listener {
 
     // TODO - function change Line
     private void changeLine() {
+        final int[] lineLeft = new int[]{36, 37, 38};
+        final int[] lineRight = new int[]{44, 43, 42};
 
     }
     // TODO - function change Line 2
@@ -197,17 +217,6 @@ public class TradeInv implements Listener {
         should do to make a class that about money.
     }*/
     // TODO - need to connect the money plugin that Vault plugin or EssentialsX plugin
-
-    @EventHandler
-    public void onCanNotClick(InventoryClickEvent event) {
-        if (event.isShiftClick()) {
-            event.setCancelled(true);
-        }
-        int[] canNotClick = new int[]{4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
-        if (Arrays.stream(canNotClick).anyMatch(x -> x == event.getSlot()) || event.getCurrentItem().getType() == Material.AIR) {
-            event.setCancelled(true);
-        }
-    }
 
     public boolean isMeLock() {
         return checks[0];
@@ -233,6 +242,7 @@ public class TradeInv implements Listener {
     public boolean setYouAccept(boolean state) {
         return this.checks[3] = state;
     }
+
 
     public Player getPlayerYou() {
         return playerYou;
