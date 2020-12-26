@@ -1,6 +1,6 @@
-package github.gntodtndls156.nextlife.test;
+package github.gntodtndls156.nextlife.playertoplayertrade;
 
-import github.gntodtndls156.nextlife.test.inventories.TradeInv;
+import github.gntodtndls156.nextlife.playertoplayertrade.inventories.TradeInv;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -11,6 +11,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -23,16 +24,25 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class InitPlayer {
+public class InitPlayer implements Listener {
     public static Map<String, ItemStack> PLAYER_SKULL = new HashMap<>();
     Player playerMe, playerYou;
     TradeInv tradeInv;
 
     public InitPlayer() {
         tradeInv = new TradeInv(getPlayerMe(), getPlayerYou());
-        Inventory inventory = TradeInv.INVENTORY.put(getPlayerMe().getName() + getPlayerYou().getName(), tradeInv.registerInventory());
+        TradeInv.INVENTORY.put(getPlayerMe().getName() + getPlayerYou().getName(), tradeInv.registerInventory());
+        Inventory inventory = TradeInv.INVENTORY.get(getPlayerMe().getName() + getPlayerYou().getName());
+        if (inventory == null) {
+            System.out.println("인벤토리가 비었습니다.");
+        } else {
+            System.out.println("인벤토리가 있습니다.");
+        }
+    }
 
-        tradeInv.openInventory(inventory);
+    TradeMain plugin;
+    public InitPlayer(TradeMain plugin) {
+        this.plugin = plugin;
     }
 
     // EVENTS

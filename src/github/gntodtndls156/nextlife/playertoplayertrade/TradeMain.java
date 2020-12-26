@@ -1,8 +1,7 @@
-package github.gntodtndls156.nextlife.test;
+package github.gntodtndls156.nextlife.playertoplayertrade;
 
-import github.gntodtndls156.nextlife.test.commands.CommandTrade;
-import github.gntodtndls156.nextlife.test.inventories.TradeInv;
-import org.bukkit.Bukkit;
+import github.gntodtndls156.nextlife.playertoplayertrade.commands.CommandTrade;
+import github.gntodtndls156.nextlife.playertoplayertrade.inventories.TradeInv;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TradeMain extends JavaPlugin {
@@ -17,7 +16,7 @@ public class TradeMain extends JavaPlugin {
 
         // REGISTER EVENT
         getServer().getPluginManager().registerEvents(new TradeInv(this), this);
-
+        getServer().getPluginManager().registerEvents(new InitPlayer(this), this);
         // REGISTER COMMAND
         this.getCommand("playertoplayertrade").setExecutor(new CommandTrade());
     }
