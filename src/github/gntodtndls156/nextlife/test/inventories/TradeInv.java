@@ -108,38 +108,45 @@ public class TradeInv implements Listener {
     public void onInventoryClickAtTradeInv(InventoryClickEvent event) {
         if (event.getInventory().getTitle().equals("Player To Player Trade")) {
             // Can not to Click on the Slot
-            // TODO - Event 정리
-        }
-    }
-    @EventHandler
-    public void onClickInventoryType(InventoryClickEvent event) { // TODO - 삭제
-        String player = event.getWhoClicked().getName();
-        switch (event.getClickedInventory().getType()) {
-            case CHEST:
-                if (getPlayerMe().getName().equals(player)) {
-                    getPlayerInventorySlotNullCheck(event, playerMeSlot);
-                } else if (getPlayerYou().getName().equals(player)) {
-                    getPlayerInventorySlotNullCheck(event, playerYouSlot);
-                }
-                break;
-            case PLAYER:
-                if (getPlayerMe().getName().equals(player)) {
-                    getTradeInventorySlotNullCheck(event, playerMeSlot);
-                } else if (getPlayerYou().getName().equals(player)) {
-                    getTradeInventorySlotNullCheck(event, playerYouSlot);
-                }
-                break;
+            if (event.isShiftClick()) {
+                return;
+            }
+            int[] canNotClick = new int[]{4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52};
+            if (Arrays.stream(canNotClick).anyMatch(n -> n == event.getSlot()) || event.getCurrentItem().getType() == Material.AIR) {
+                return;
+            }
+            event.setCancelled(true);
+            String player = event.getWhoClicked().getName();
+            switch (event.getClickedInventory().getType()) {
+                case CHEST:
+                    if (getPlayerMe().getName().equals(player)) {
+                        getPlayerInventorySlotNullCheck(event, playerMeSlot);
+                    } else {
+                        getPlayerInventorySlotNullCheck(event, playerYouSlot);
+                    }
+                    break;
+                case PLAYER:
+                    if (getPlayerMe().getName().equals(player)) {
+                        getTradeInventorySlotNullCheck(event, playerMeSlot);
+                    } else {
+                        getTradeInventorySlotNullCheck(event, playerYouSlot);
+                    }
+                    break;
+            }
         }
     }
 
-    // @EventHandler
-    public void onCanNotClick(InventoryClickEvent event) { // TODO - 삭제
-        if (event.isShiftClick()) {
+    @EventHandler
+    public void onInventoryClickToButtonAtTradeInv(InventoryClickEvent event) {
+        if (event.getInventory().getTitle().equals("Player To Player Trade")) {
             event.setCancelled(true);
-        }
-        int[] canNotClick = new int[]{4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
-        if (Arrays.stream(canNotClick).anyMatch(x -> x == event.getSlot()) || event.getCurrentItem().getType() == Material.AIR) {
-            event.setCancelled(true);
+            if (event.isLeftClick() && event.getSlot() == 53) {
+                String getItem = event.getCurrentItem().getItemMeta().getDisplayName();
+                String player = event.getWhoClicked().getName();
+                if (getItem.equals("거래 잠그기")) {
+
+                }
+            }
         }
     }
 
