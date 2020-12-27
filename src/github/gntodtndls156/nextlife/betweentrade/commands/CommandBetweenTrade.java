@@ -1,18 +1,17 @@
-package github.gntodtndls156.nextlife.playertoplayertrade.commands;
+package github.gntodtndls156.nextlife.betweentrade.commands;
 
-import github.gntodtndls156.nextlife.playertoplayertrade.InitPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandTrade implements CommandExecutor {
+public class CommandBetweenTrade implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        // player to player trade
-        if (OnlinePlayerCheck(strings[0]) && OnlinePlayerCheck(strings[1]))
-            new InitPlayer();
+        // TODO - make /BetWeenTrade
+
+
         return false;
     }
 
