@@ -11,7 +11,8 @@ public class COMMAND_BetweenTrade implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (OnlinePlayerCheck(strings[0]) && OnlinePlayerCheck(strings[1])) {
-
+            System.out.println("command " + strings); // TODO CHECK
+            new HANDLE_Trade(strings[0], strings[1]);
         }
         return false;
     }

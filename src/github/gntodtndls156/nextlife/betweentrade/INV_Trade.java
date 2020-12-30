@@ -5,8 +5,8 @@ import org.bukkit.inventory.Inventory;
 
 public class INV_Trade {
     boolean[] checks = new boolean[4];
-    Player playerMe, playerYou;
-    Inventory inventory;
+    private Player playerMe, playerYou;
+    private Inventory inventory;
 
     public INV_Trade(Player playerMe, Player playerYou) {
         this.playerMe = playerMe;
@@ -14,9 +14,12 @@ public class INV_Trade {
     }
 
     public void openInventory() {
+        System.out.println("INV_Trade " + playerMe + " " + playerYou); // TODO CHECK
+        System.out.println("INV_Trade " + inventory.getTitle());
         playerMe.openInventory(inventory);
         playerYou.openInventory(inventory);
     }
+
 
 
     public boolean isMeLock() {
@@ -59,5 +62,8 @@ public class INV_Trade {
 
     public Inventory getInventory() {
         return inventory;
+    }
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
     }
 }

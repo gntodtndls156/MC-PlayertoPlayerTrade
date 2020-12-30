@@ -20,6 +20,8 @@ public class INIT_Button {
                 return ButtonLock("거래 잠그기", new String[] {"이 재화로 거래하자고 제안합니다."}, 14);
             case 2:
                 return ButtonLock("거래 수락하기", new String[]{"최종적으로 거래를 수락합니다.", "상대방도 수락할 경우 거래가 완료됩니다."}, 11);
+            case 3:
+                return ButtonMoney();
         }
         return null;
     }
