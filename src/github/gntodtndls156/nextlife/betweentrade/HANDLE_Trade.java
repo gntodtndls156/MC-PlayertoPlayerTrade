@@ -20,17 +20,19 @@ public class HANDLE_Trade implements Listener {
     final int[] lineLeft = new int[]{36, 37, 38};
     final int[] lineRight = new int[]{44, 43, 42};
     final int[] lineCenter = new int[]{40, 31, 22, 13, 4};
+    static String TEST = "testPlayerNext_Life";
     String TRADE_key;
     INV_Trade invTrade;
 
     public HANDLE_Trade(String playerMe, String playerYou) {
-        this.TRADE_key = playerMe + playerYou;
-        this.invTrade = new INV_Trade(Bukkit.getPlayer(playerMe), Bukkit.getPlayer(playerYou));
-        TRADE.put(TRADE_key, invTrade);
+        System.out.println(TEST);
+        this.TRADE_key = playerMe.concat(playerYou);
+        System.out.println("HANDEL_Trade " + TRADE_key);
+        this.invTrade = TRADE.put(TRADE_key, new INV_Trade(Bukkit.getPlayer(playerMe), Bukkit.getPlayer(playerYou)));
         System.out.println("HANDLE_Trade " + playerMe + " " + playerYou); // TODO CHECK
         System.out.println("HANDLE_Trade " + Bukkit.getPlayer(playerMe) + " " + Bukkit.getPlayer(playerYou));
-        invTrade.setInventory(registerInventory(playerMe, playerYou));
-        invTrade.openInventory();
+        TRADE.get(TRADE_key).setInventory(registerInventory(playerMe, playerYou));
+        TRADE.get(TRADE_key).openInventory();
     }
     MAIN_BetweenTrade plugin;
     public HANDLE_Trade(MAIN_BetweenTrade plugin) {
@@ -39,6 +41,8 @@ public class HANDLE_Trade implements Listener {
 
     @EventHandler
     public void onClickAtTradeInventory(InventoryClickEvent event) {
+        System.out.println("onClickAtTradeInventory " + TRADE_key);
+        System.out.println("onClickAtTradeInventory " + this.TRADE_key);
         if (event.getInventory().getTitle().equals("Player To Player Trade")) {
             event.setCancelled(true);
 
@@ -46,8 +50,10 @@ public class HANDLE_Trade implements Listener {
             final String player$name = player.getName();
             // TODO CHECK
             System.out.println("onClickAtTradeInventory " + player + " " + player$name);
-            System.out.println("onClickAtTradeInventory " + invTrade.getInventory().getTitle());
-            System.out.println("onClickAtTradeInventory " + invTrade.getPlayerMe() + " " + TRADE.get(TRADE_key).getPlayerYou());
+            System.out.println(TEST);
+            System.out.println("onClickAtTradeInventory " + TRADE_key);
+            System.out.println("onClickAtTradeInventory " + TRADE.get(TRADE_key).getInventory().getTitle());
+            System.out.println("onClickAtTradeInventory " + TRADE.get(TRADE_key).getPlayerMe() + " " + TRADE.get(TRADE_key).getPlayerYou());
 
 
             if (event.getRawSlot() == 53) {
@@ -59,17 +65,17 @@ public class HANDLE_Trade implements Listener {
                     for(int i = 0; i < 3; i++) {
                         int finalI = i;
                         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                            invTrade.getInventory().setItem(
-                                    invTrade.getPlayerMe().getName().equals(player$name) ? lineLeft[finalI] : lineRight[finalI],
+                            TRADE.get(TRADE_key).getInventory().setItem(
+                                    TRADE.get(TRADE_key).getPlayerMe().getName().equals(player$name) ? lineLeft[finalI] : lineRight[finalI],
                                     new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 12)
                             );
                             if (finalI == 3) {
-                                if (invTrade.getPlayerMe().getName().equals(player$name)) {
-                                    invTrade.setMeLock(true);
+                                if (TRADE.get(TRADE_key).getPlayerMe().getName().equals(player$name)) {
+                                    TRADE.get(TRADE_key).setMeLock(true);
                                 } else {
-                                    invTrade.setYouLock(true);
+                                    TRADE.get(TRADE_key).setYouLock(true);
                                 }
-                                if (invTrade.isMeLock() && invTrade.isYouLock()) {
+                                if (TRADE.get(TRADE_key).isMeLock() && TRADE.get(TRADE_key).isYouLock()) {
                                     changeLine(12, event, true);
                                 }
                             }
@@ -91,19 +97,19 @@ public class HANDLE_Trade implements Listener {
                     resetToTrade();
                     for (int i = 0; i <= 35; i++) {
                         if (event.getWhoClicked().getInventory().getContents()[i] == null &&
-                                IntStream.of(invTrade.getPlayerMe().getName().equals(player$name) ? playerMeSlot : playerYouSlot)
+                                IntStream.of(TRADE.get(TRADE_key).getPlayerMe().getName().equals(player$name) ? playerMeSlot : playerYouSlot)
                                         .anyMatch(slot -> slot == event.getSlot())) {
                             event.getWhoClicked().getInventory().setItem(i, event.getCurrentItem());
-                            invTrade.getInventory().setItem(event.getSlot(), new ItemStack(Material.AIR));
+                            TRADE.get(TRADE_key).getInventory().setItem(event.getSlot(), new ItemStack(Material.AIR));
                         }
                     }
                     break;
                 case PLAYER:
                     resetToTrade();
-                    int[] slot = invTrade.getPlayerMe().getName().equals(player$name) ? playerMeSlot : playerYouSlot;
+                    int[] slot = TRADE.get(TRADE_key).getPlayerMe().getName().equals(player$name) ? playerMeSlot : playerYouSlot;
                     for (int i = 0; i < slot.length; i++) {
                         if (event.getInventory().getContents()[slot[i]] == null) {
-                            invTrade.getInventory().setItem(slot[i], event.getCurrentItem());
+                            TRADE.get(TRADE_key).getInventory().setItem(slot[i], event.getCurrentItem());
                             event.getWhoClicked().getInventory().setItem(event.getSlot(), new ItemStack(Material.AIR));
                         }
                     }
@@ -111,16 +117,17 @@ public class HANDLE_Trade implements Listener {
         }
     }
     private void changeLine(int color, InventoryClickEvent event, boolean state) {
+        System.out.println("changeLine " + TRADE_key);
         for(int i = 0; i < lineCenter.length; i++) {
             int finalI = i;
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                invTrade.getInventory().setItem(
+                TRADE.get(TRADE_key).getInventory().setItem(
                         lineCenter[finalI],
                         new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) color)
                 );
                 if (finalI + 1 == lineCenter.length) {
                     if (state) {
-                        invTrade.getInventory().setItem(53, new INIT_Button(2).ButtonLock());
+                        TRADE.get(TRADE_key).getInventory().setItem(53, new INIT_Button(2).ButtonLock());
                     } else {
                     // TODO
                     }
@@ -130,13 +137,13 @@ public class HANDLE_Trade implements Listener {
     }
 
     private void resetToTrade() {
-        Arrays.fill(invTrade.checks, false);
+        Arrays.fill(TRADE.get(TRADE_key).checks, false);
         Bukkit.getScheduler().cancelTasks(plugin);
         int[] line = new int[] { 40, 31, 22, 13 ,4 ,36, 37, 38, 44, 43, 42 };
         for(int i = 0; i < line.length; i++) {
-            invTrade.getInventory().setItem(line[i], new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1));
+            TRADE.get(TRADE_key).getInventory().setItem(line[i], new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1));
         }
-        invTrade.getInventory().setItem(53, new INIT_Button(1).ButtonLock());
+        TRADE.get(TRADE_key).getInventory().setItem(53, new INIT_Button(1).ButtonLock());
     }
     private void successToTrade(InventoryClickEvent event) {
         ItemStack line$0 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 4);
@@ -144,15 +151,15 @@ public class HANDLE_Trade implements Listener {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             resetToTrade();
             for(int i = 0; i < 3; i++) {
-                invTrade.getInventory().setItem(lineRight[i], line$0);
-                invTrade.getInventory().setItem(lineLeft[i], line$0);
+                TRADE.get(TRADE_key).getInventory().setItem(lineRight[i], line$0);
+                TRADE.get(TRADE_key).getInventory().setItem(lineLeft[i], line$0);
             }
 
             for(int i = 2; i >= 0; i--) {
                 int finalI = i;
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    invTrade.getInventory().setItem(lineRight[finalI], line$1);
-                    invTrade.getInventory().setItem(lineRight[finalI], line$1);
+                    TRADE.get(TRADE_key).getInventory().setItem(lineRight[finalI], line$1);
+                    TRADE.get(TRADE_key).getInventory().setItem(lineRight[finalI], line$1);
                 }, 5 + (i * 5));
             }
 
@@ -163,8 +170,8 @@ public class HANDLE_Trade implements Listener {
                 toPlayer[playerMeSlot[i]] = toPlayer[playerYouSlot[i]];
                 toPlayer[playerYouSlot[i]] = temp[i];
 
-                invTrade.getInventory().setItem(playerMeSlot[i], toPlayer[playerMeSlot[i]]);
-                invTrade.getInventory().setItem(playerYouSlot[i], toPlayer[playerYouSlot[i]]);
+                TRADE.get(TRADE_key).getInventory().setItem(playerMeSlot[i], toPlayer[playerMeSlot[i]]);
+                TRADE.get(TRADE_key).getInventory().setItem(playerYouSlot[i], toPlayer[playerYouSlot[i]]);
             }
         }, 3L);
     }
@@ -173,7 +180,7 @@ public class HANDLE_Trade implements Listener {
         Inventory inventory;
         inventory = Bukkit.createInventory(null, 9 * 6, "Player To Player Trade");
         ItemStack line = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1);
-
+        System.out.println("registerInventory " + TRADE_key);
         for(int i = 0; i < 9; i++) {
             inventory.setItem(9 * 4 + i, line);
         }

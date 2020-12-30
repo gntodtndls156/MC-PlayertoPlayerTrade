@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class COMMAND_BetweenTrade implements CommandExecutor {
-    // command /BetweenTrade
+    // command /betweenTrade
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (OnlinePlayerCheck(strings[0]) && OnlinePlayerCheck(strings[1])) {

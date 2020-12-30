@@ -20,8 +20,6 @@ public class INV_Trade {
         playerYou.openInventory(inventory);
     }
 
-
-
     public boolean isMeLock() {
         return checks[0];
     }
