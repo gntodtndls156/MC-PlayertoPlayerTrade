@@ -15,20 +15,19 @@ import java.util.stream.IntStream;
 
 public class HANDLE_Trade implements Listener {
     static Map<String, INV_Trade> TRADE = new HashMap<>();
+    static Map<String, String> PLAYERS = new HashMap<>();
     final int[] playerMeSlot = new int[]{0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
     final int[] playerYouSlot = new int[]{5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 23, 24, 35};
     final int[] lineLeft = new int[]{36, 37, 38};
     final int[] lineRight = new int[]{44, 43, 42};
     final int[] lineCenter = new int[]{40, 31, 22, 13, 4};
-    static String TEST = "testPlayerNext_Life";
     String TRADE_key;
-    INV_Trade invTrade;
 
     public HANDLE_Trade(String playerMe, String playerYou) {
-        System.out.println(TEST);
         this.TRADE_key = playerMe.concat(playerYou);
         System.out.println("HANDEL_Trade " + TRADE_key);
-        this.invTrade = TRADE.put(TRADE_key, new INV_Trade(Bukkit.getPlayer(playerMe), Bukkit.getPlayer(playerYou)));
+        TRADE.put(TRADE_key, new INV_Trade(Bukkit.getPlayer(playerMe), Bukkit.getPlayer(playerYou)));
+        PLAYERS.put(playerMe, playerYou);
         System.out.println("HANDLE_Trade " + playerMe + " " + playerYou); // TODO CHECK
         System.out.println("HANDLE_Trade " + Bukkit.getPlayer(playerMe) + " " + Bukkit.getPlayer(playerYou));
         TRADE.get(TRADE_key).setInventory(registerInventory(playerMe, playerYou));
@@ -50,11 +49,9 @@ public class HANDLE_Trade implements Listener {
             final String player$name = player.getName();
             // TODO CHECK
             System.out.println("onClickAtTradeInventory " + player + " " + player$name);
-            System.out.println(TEST);
+            TRADE_key = player$name + PLAYERS.get(player$name);
             System.out.println("onClickAtTradeInventory " + TRADE_key);
-            System.out.println("onClickAtTradeInventory " + TRADE.get(TRADE_key).getInventory().getTitle());
-            System.out.println("onClickAtTradeInventory " + TRADE.get(TRADE_key).getPlayerMe() + " " + TRADE.get(TRADE_key).getPlayerYou());
-
+            System.out.println("onClickAtTradeInventory " + this.TRADE_key);
 
             if (event.getRawSlot() == 53) {
                 ItemStack Button = event.getCurrentItem();
