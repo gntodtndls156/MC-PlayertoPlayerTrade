@@ -1,18 +1,19 @@
-package github.gntodtndls156.nextlife.betweentrade;
+package github.gntodtndls156.nextlife.betweentrade.commands;
 
+import github.gntodtndls156.nextlife.betweentrade.handles.HandleTrade;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class COMMAND_BetweenTrade implements CommandExecutor {
+public class BetweenTradeCommand implements CommandExecutor {
     // command /betweenTrade
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (OnlinePlayerCheck(strings[0]) && OnlinePlayerCheck(strings[1])) {
             System.out.println("command " + strings); // TODO CHECK
-            new HANDLE_Trade(strings[0], strings[1]);
+            new HandleTrade(strings[0], strings[1]);
         }
         return false;
     }

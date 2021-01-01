@@ -1,17 +1,19 @@
-package github.gntodtndls156.nextlife.betweentrade;
+package github.gntodtndls156.nextlife.betweentrade.inventories;
 
+import github.gntodtndls156.nextlife.betweentrade.inits.InitButton;
+import github.gntodtndls156.nextlife.betweentrade.inits.InitPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class INV_Trade {
+public class InvTrade {
     private boolean[] checks = new boolean[4];
     private Player playerMe, playerYou;
     private Inventory inventory;
 
-    public INV_Trade(Player playerMe, Player playerYou) {
+    public InvTrade(Player playerMe, Player playerYou) {
         this.playerMe = playerMe;
         this.playerYou = playerYou;
 
@@ -26,11 +28,11 @@ public class INV_Trade {
             inventory.setItem(count + (i * 9), line);
         }
 
-        inventory.setItem(39, INIT_Player.PLAYER_SKULL.get(playerMe));
-        inventory.setItem(41, INIT_Player.PLAYER_SKULL.get(playerYou));
+        inventory.setItem(39, InitPlayer.PLAYER_SKULL.get(playerMe));
+        inventory.setItem(41, InitPlayer.PLAYER_SKULL.get(playerYou));
 
-        inventory.setItem(53, new INIT_Button(1).ButtonLock());
-        inventory.setItem(45, new INIT_Button(3).ButtonLock());
+        inventory.setItem(53, new InitButton(1).ButtonLock());
+        inventory.setItem(45, new InitButton(3).ButtonLock());
 
         this.inventory = inventory;
 

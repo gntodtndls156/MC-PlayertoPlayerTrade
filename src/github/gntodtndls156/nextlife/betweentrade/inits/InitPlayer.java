@@ -1,4 +1,4 @@
-package github.gntodtndls156.nextlife.betweentrade;
+package github.gntodtndls156.nextlife.betweentrade.inits;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class INIT_Player implements Listener {
+public class InitPlayer implements Listener {
     public static Map<String, ItemStack> PLAYER_SKULL = new HashMap<>();
 
     @EventHandler

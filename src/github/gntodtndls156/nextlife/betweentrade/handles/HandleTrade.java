@@ -1,5 +1,9 @@
-package github.gntodtndls156.nextlife.betweentrade;
+package github.gntodtndls156.nextlife.betweentrade.handles;
 
+import github.gntodtndls156.nextlife.betweentrade.MainBetweenTrade;
+import github.gntodtndls156.nextlife.betweentrade.inits.InitButton;
+import github.gntodtndls156.nextlife.betweentrade.inventories.InvMoney;
+import github.gntodtndls156.nextlife.betweentrade.inventories.InvTrade;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,8 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-public class HANDLE_Trade implements Listener {
-    private static Map<String, INV_Trade> TRADE = new HashMap<>();
+public class HandleTrade implements Listener {
+    private static Map<String, InvTrade> TRADE = new HashMap<>();
     private static Map<String, String> TRADE_KEY = new HashMap<>();
 
     final int[] playerMeSlot = new int[]{0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
@@ -24,11 +28,11 @@ public class HANDLE_Trade implements Listener {
     final int[] lineCenter = new int[]{40, 31, 22, 13, 4};
 
     private String TRADE_KEY$get;
-    public HANDLE_Trade(String playerMe, String playerYou) {
+    public HandleTrade(String playerMe, String playerYou) {
         TRADE_KEY.put(playerMe, playerMe + playerYou);
         TRADE_KEY.put(playerYou, playerMe + playerYou);
 
-        TRADE.put(playerMe + playerYou, new INV_Trade(Bukkit.getPlayer(playerMe), Bukkit.getPlayer(playerYou)));
+        TRADE.put(playerMe + playerYou, new InvTrade(Bukkit.getPlayer(playerMe), Bukkit.getPlayer(playerYou)));
     }
 
     @EventHandler
@@ -93,6 +97,12 @@ public class HANDLE_Trade implements Listener {
                 }
             }
 
+            if (event.getRawSlot() == 45) {
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals("돈 거래")) {
+                    player.openInventory(new InvMoney().getInventory());
+                }
+            }
+
             if (event.getCurrentItem().getType() == Material.AIR ||
                     Arrays.stream(new int[]{4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53}).anyMatch(slot -> slot == event.getRawSlot()) ||
                     event.getInventory().getType() == null) {
@@ -135,7 +145,7 @@ public class HANDLE_Trade implements Listener {
                 );
                 if (finalI + 1 == lineCenter.length) {
                     if (state) {
-                        TRADE.get(TRADE_KEY$get).getInventory().setItem(53, new INIT_Button(2).ButtonLock());
+                        TRADE.get(TRADE_KEY$get).getInventory().setItem(53, new InitButton(2).ButtonLock());
                     } else {
                         // TODO
                         successToTrade(event);
@@ -152,7 +162,7 @@ public class HANDLE_Trade implements Listener {
         for (int i = 0; i < slot.length; i++) {
             TRADE.get(TRADE_KEY$get).getInventory().setItem(slot[i], new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1));
         }
-        TRADE.get(TRADE_KEY$get).getInventory().setItem(53, new INIT_Button(1).ButtonLock());
+        TRADE.get(TRADE_KEY$get).getInventory().setItem(53, new InitButton(1).ButtonLock());
     }
 
     private void successToTrade(InventoryClickEvent event) {
@@ -187,8 +197,8 @@ public class HANDLE_Trade implements Listener {
         }, 3L);
     }
 
-    private MAIN_BetweenTrade plugin;
-    public HANDLE_Trade(MAIN_BetweenTrade plugin) {
+    private MainBetweenTrade plugin;
+    public HandleTrade(MainBetweenTrade plugin) {
         this.plugin = plugin;
     }
 }

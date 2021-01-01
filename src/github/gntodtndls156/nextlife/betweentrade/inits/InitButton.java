@@ -1,4 +1,4 @@
-package github.gntodtndls156.nextlife.betweentrade;
+package github.gntodtndls156.nextlife.betweentrade.inits;
 
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -8,9 +8,9 @@ import org.bukkit.material.Wool;
 
 import java.util.Arrays;
 
-public class INIT_Button {
+public class InitButton {
     int number;
-    public INIT_Button(int number) {
+    public InitButton(int number) {
         this.number = number;
     }
 
@@ -49,5 +49,12 @@ public class INIT_Button {
 
         item.setItemMeta(meta);
         return item;
+    }
+
+    private ItemStack ButtonMoney$stone() {
+        ItemStack item; // TODO
+    }
+    private ItemStack ButtonMoney$wood() {
+        ItemStack item; // TODO
     }
 }
