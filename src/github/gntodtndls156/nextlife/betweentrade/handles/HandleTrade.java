@@ -65,7 +65,6 @@ public class HandleTrade implements Listener {
                                     }
 
                                     if (TRADE.get(TRADE_KEY$get).isMeLock() && TRADE.get(TRADE_KEY$get).isYouLock()) {
-                                        // TODO
                                         changeLine(12, event, true);
                                     }
                                 }
@@ -73,7 +72,6 @@ public class HandleTrade implements Listener {
                         }
                         break;
                     case "거래 수락하기":
-                        // TODO
                         for (int i = 0; i < 3; i++) {
                             int finalI = i;
                             Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -99,7 +97,7 @@ public class HandleTrade implements Listener {
 
             if (event.getRawSlot() == 45) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals("돈 거래")) {
-                    player.openInventory(new InvMoney().getInventory());
+                    player.openInventory(new InvMoney(player).getInventory());
                 }
             }
 
@@ -111,7 +109,6 @@ public class HandleTrade implements Listener {
 
             switch(event.getClickedInventory().getType()) {
                 case CHEST:
-                    // TODO
                     resetToTrade();
                     for (int i = 0; i <= 35; i++) {
                         if (event.getWhoClicked().getInventory().getContents()[i] == null && //
@@ -122,7 +119,6 @@ public class HandleTrade implements Listener {
                     }
                     break;
                 case PLAYER:
-                    // TODO
                     resetToTrade();
                     final int[] slot = TRADE.get(TRADE_KEY$get).getPlayerMe().getName().equals(player$name) ? playerMeSlot : playerYouSlot;
                     for (int i = 0; i < 16; i++) {
@@ -147,7 +143,6 @@ public class HandleTrade implements Listener {
                     if (state) {
                         TRADE.get(TRADE_KEY$get).getInventory().setItem(53, new InitButton(2).ButtonLock());
                     } else {
-                        // TODO
                         successToTrade(event);
                     }
                 }
