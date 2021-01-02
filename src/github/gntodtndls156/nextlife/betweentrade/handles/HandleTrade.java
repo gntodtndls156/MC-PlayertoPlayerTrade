@@ -2,7 +2,6 @@ package github.gntodtndls156.nextlife.betweentrade.handles;
 
 import github.gntodtndls156.nextlife.betweentrade.MainBetweenTrade;
 import github.gntodtndls156.nextlife.betweentrade.inits.InitButton;
-import github.gntodtndls156.nextlife.betweentrade.inventories.InvMoney;
 import github.gntodtndls156.nextlife.betweentrade.inventories.InvTrade;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -18,8 +17,8 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 public class HandleTrade implements Listener {
-    private static Map<String, InvTrade> TRADE = new HashMap<>();
-    private static Map<String, String> TRADE_KEY = new HashMap<>();
+    protected static Map<String, InvTrade> TRADE = new HashMap<>();
+    protected static Map<String, String> TRADE_KEY = new HashMap<>();
 
     final int[] playerMeSlot = new int[]{0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
     final int[] playerYouSlot = new int[]{5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 23, 24, 35};
@@ -97,7 +96,7 @@ public class HandleTrade implements Listener {
 
             if (event.getRawSlot() == 45) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals("돈 거래")) {
-                    HandleMoney money = new HandleMoney(player);
+                    HandleMoney money = new HandleMoney(player, TRADE.get(TRADE_KEY$get).getInventory());
                     player.openInventory(money.openInventory());
                 }
             }

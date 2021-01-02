@@ -69,15 +69,10 @@ public class InvMoney {
         return inventory;
     }
 
-    public int getMoney() {
-        return money;
+    public void plus(int number) {
+        this.sum += number;
     }
-
-    public int getSum() {
-        return sum;
-    }
-
-    public void setMoney(int money) {
-        this.money = money;
+    public void minus(int number) {
+        this.sum -= number;
     }
 }
