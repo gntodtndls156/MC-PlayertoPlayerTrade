@@ -1,5 +1,6 @@
 package github.gntodtndls156.nextlife.betweentrade.inits;
 
+import com.sun.org.apache.xml.internal.security.Init;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -10,14 +11,24 @@ import java.util.Arrays;
 
 public class InitButton {
     int number;
-    double count$0, count$1;
+    int count$0, count$1, coins;
     public InitButton(int number) {
         this.number = number;
     }
-    public InitButton(int number, double count$0, double count$1) {
+    public InitButton(int number, int coins, int count$0, int count$1) {
         this.number = number;
         this.count$0 = count$0;
         this.count$1 = count$1;
+        this.coins = coins;
+    }
+    public InitButton(int number, int sum, int money) {
+        this.number = number;
+        this.count$0 = sum;
+        this.count$1 = money;
+    }
+    public InitButton(int number, int money) {
+        this.number = number;
+        this.count$0 = money;
     }
     public ItemStack ButtonLock() {
         switch (number) {
@@ -28,15 +39,17 @@ public class InitButton {
             case 3:
                 return ButtonMoney();
             case 4:
-                return ButtonMoney$increase("Add " + count$0 + "Coins",
-                        new String[]{"Click to add more", "", count$1 + " Coins will be moved in you Inventory", "", "After moving, your balance is "},
-                        Material.STONE_BUTTON, count$0, count$1);
+                return ButtonMoney("Add " + coins + "Coins",
+                        new String[]{"Click to add more", "", count$0 + " Coins will be moved in you Inventory", "", "After moving, your balance is " + count$1},
+                        Material.STONE_BUTTON);
             case 5:
-                return ButtonMoney$increase("Remove " + count$0 + "Coins",
-                        new String[]{"Click to remove more", "", count$1 + " Coins will be moved in you Inventory", "", "After moving, your balance is "},
-                        Material.WOOD_BUTTON, count$0, count$1);
+                return ButtonMoney("Remove " + coins + "Coins",
+                        new String[]{"Click to add more", "", count$0 + " Coins will be moved in you Inventory", "", "After moving, your balance is " + count$1},
+                        Material.WOOD_BUTTON);
             case 6:
-                return ButtonMoney$add(count$0, count$1);
+                return ButtonMoney("Add to Trade",
+                        new String[]{"Click to add " + count$0 + " Coins to this trade", "", "Your balance afterwards will be " + count$1},
+                        Material.WOOD_AXE);
             case 7:
                 return ButtonMoney$back();
             case 8:
@@ -70,7 +83,7 @@ public class InitButton {
         item.setItemMeta(meta);
         return item;
     }
-    private ItemStack ButtonMoney$increase(String name, String[] lore, Material material, double count$0, double count$1) {
+    private ItemStack ButtonMoney(String name, String[] lore, Material material) {
         ItemStack item = new ItemStack(material, 1); // TODO
         ItemMeta meta = item.getItemMeta();
 
@@ -80,23 +93,25 @@ public class InitButton {
         item.setItemMeta(meta);
         return item;
     }
-    private ItemStack ButtonMoney$add(double count$0, double count$1) {
-        ItemStack item = new ItemStack(Material.WOOD, 1);
+    private ItemStack ButtonMoney$show(double count$0) {
+        // TODO
+        ItemStack item = new ItemStack(Material.BED, 1);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName("Add to Trade");
-        meta.setLore(Arrays.asList("Click to add " + count$0 + " Coins to this trade", "", "Your balance afterwards will be " + count$1));
+        meta.setDisplayName("Type in Value");
+        meta.setLore(Arrays.asList("Click to type in an exact value"));
 
         item.setItemMeta(meta);
         return item;
     }
-    private ItemStack ButtonMoney$show(double count$0) {
-        // TODO
-        ItemStack item = null;
-        return item;
-    }
     private ItemStack ButtonMoney$back() {
-        ItemStack item = null;
+        ItemStack item = new ItemStack(Material.BED, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName("Back");
+        meta.setLore(Arrays.asList("Click to go back"));
+
+        item.setItemMeta(meta);
         return item;
     }
 }

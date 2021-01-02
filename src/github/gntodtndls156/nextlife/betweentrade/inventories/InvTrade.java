@@ -17,7 +17,6 @@ public class InvTrade {
         this.playerMe = playerMe;
         this.playerYou = playerYou;
 
-        Inventory inventory;
         inventory = Bukkit.createInventory(null, 9 * 6, "Player To Player Trade");
         ItemStack line = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 1);
         for(int i = 0; i < 9; i++) {
@@ -33,8 +32,6 @@ public class InvTrade {
 
         inventory.setItem(53, new InitButton(1).ButtonLock());
         inventory.setItem(45, new InitButton(3).ButtonLock());
-
-        this.inventory = inventory;
 
         playerMe.openInventory(this.inventory);
         playerYou.openInventory(this.inventory);

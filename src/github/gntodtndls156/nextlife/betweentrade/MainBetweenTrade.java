@@ -1,6 +1,7 @@
 package github.gntodtndls156.nextlife.betweentrade;
 
 import github.gntodtndls156.nextlife.betweentrade.commands.BetweenTradeCommand;
+import github.gntodtndls156.nextlife.betweentrade.handles.HandleMoney;
 import github.gntodtndls156.nextlife.betweentrade.handles.HandleTrade;
 import github.gntodtndls156.nextlife.betweentrade.inits.InitPlayer;
 import net.milkbowl.vault.chat.Chat;
@@ -26,6 +27,7 @@ public class MainBetweenTrade extends JavaPlugin {
         // To register EVENTS
         getServer().getPluginManager().registerEvents(new HandleTrade(this), this);
         getServer().getPluginManager().registerEvents(new InitPlayer(), this);
+        getServer().getPluginManager().registerEvents(new HandleMoney(), this);
         // TO register COMMANDS
         this.getCommand("betweenTrade").setExecutor(new BetweenTradeCommand());
         // TO connect Plugin "Vault"

@@ -1,5 +1,6 @@
 package github.gntodtndls156.nextlife.betweentrade.commands;
 
+import github.gntodtndls156.nextlife.betweentrade.handles.HandleMoney;
 import github.gntodtndls156.nextlife.betweentrade.handles.HandleTrade;
 import github.gntodtndls156.nextlife.betweentrade.inventories.InvMoney;
 import org.bukkit.Bukkit;
@@ -19,7 +20,7 @@ public class BetweenTradeCommand implements CommandExecutor {
             }
         }
         if (strings[0] != null) {
-            new InvMoney(Bukkit.getPlayer(strings[0]));
+            new HandleMoney(Bukkit.getPlayer(strings[0]));
         }
         return false;
     }
