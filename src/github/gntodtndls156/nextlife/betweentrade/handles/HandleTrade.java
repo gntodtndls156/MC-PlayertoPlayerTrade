@@ -97,7 +97,7 @@ public class HandleTrade implements Listener {
 
             if (event.getRawSlot() == 45) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals("돈 거래")) {
-                    player.openInventory(new InvMoney(player).getInventory());
+                    player.openInventory(new HandleMoney(player).getInvMoney().getInventory());
                 }
             }
 

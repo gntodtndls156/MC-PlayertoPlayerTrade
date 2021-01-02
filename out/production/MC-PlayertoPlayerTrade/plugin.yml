@@ -1,6 +1,6 @@
 description: Player To Player Trade
 name: PlayerToPlayerTrade
-main: github.gntodtndls156.nextlife.betweentrade.MAIN_BetweenTrade
+main: github.gntodtndls156.nextlife.betweentrade.MainBetweenTrade
 api-version: 1.12.2
 version: 0.1
 depend: [Vault]

@@ -1,6 +1,7 @@
 package github.gntodtndls156.nextlife.betweentrade.commands;
 
 import github.gntodtndls156.nextlife.betweentrade.handles.HandleTrade;
+import github.gntodtndls156.nextlife.betweentrade.inventories.InvMoney;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,9 +12,14 @@ public class BetweenTradeCommand implements CommandExecutor {
     // command /betweenTrade
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (OnlinePlayerCheck(strings[0]) && OnlinePlayerCheck(strings[1])) {
-            System.out.println("command " + strings); // TODO CHECK
-            new HandleTrade(strings[0], strings[1]);
+        if (strings.length >= 2) {
+            if (OnlinePlayerCheck(strings[0]) && OnlinePlayerCheck(strings[1])) {
+                System.out.println("command " + strings); // TODO CHECK
+                new HandleTrade(strings[0], strings[1]);
+            }
+        }
+        if (strings[0] != null) {
+            new InvMoney(Bukkit.getPlayer(strings[0]));
         }
         return false;
     }

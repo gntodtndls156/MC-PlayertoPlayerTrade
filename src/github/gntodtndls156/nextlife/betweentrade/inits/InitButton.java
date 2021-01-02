@@ -10,11 +10,11 @@ import java.util.Arrays;
 
 public class InitButton {
     int number;
-    int count$0, count$1;
+    double count$0, count$1;
     public InitButton(int number) {
         this.number = number;
     }
-    public InitButton(int number, int count$0, int count$1) {
+    public InitButton(int number, double count$0, double count$1) {
         this.number = number;
         this.count$0 = count$0;
         this.count$1 = count$1;
@@ -28,9 +28,13 @@ public class InitButton {
             case 3:
                 return ButtonMoney();
             case 4:
-                return ButtonMoney$stone(count$0, count$1);
+                return ButtonMoney$increase("Add " + count$0 + "Coins",
+                        new String[]{"Click to add more", "", count$1 + " Coins will be moved in you Inventory", "", "After moving, your balance is "},
+                        Material.STONE_BUTTON, count$0, count$1);
             case 5:
-                return ButtonMoney$wood(count$0, count$1);
+                return ButtonMoney$increase("Remove " + count$0 + "Coins",
+                        new String[]{"Click to remove more", "", count$1 + " Coins will be moved in you Inventory", "", "After moving, your balance is "},
+                        Material.WOOD_BUTTON, count$0, count$1);
             case 6:
                 return ButtonMoney$add(count$0, count$1);
             case 7:
@@ -66,27 +70,17 @@ public class InitButton {
         item.setItemMeta(meta);
         return item;
     }
-    private ItemStack ButtonMoney$stone(int count$0, int count$1) {
-        ItemStack item = new ItemStack(Material.STONE_BUTTON, 1); // TODO
+    private ItemStack ButtonMoney$increase(String name, String[] lore, Material material, double count$0, double count$1) {
+        ItemStack item = new ItemStack(material, 1); // TODO
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName("Add " + count$0 + "Coins");
-        meta.setLore(Arrays.asList("Click to add more", "", count$1 + " Coins will be moved in you Inventory", "", "After moving, your balance is "));
+        meta.setDisplayName(name);
+        meta.setLore(Arrays.asList(lore));
 
         item.setItemMeta(meta);
         return item;
     }
-    private ItemStack ButtonMoney$wood(int count$0, int count$1) {
-        ItemStack item = new ItemStack(Material.WOOD_BUTTON, 1); // TODO
-        ItemMeta meta = item.getItemMeta();
-
-        meta.setDisplayName("Remove " + count$0 + "Coins");
-        meta.setLore(Arrays.asList("Click to remove more", "", count$1 + " Coins will be moved in you Inventory", "", "After moving, your balance is "));
-
-        item.setItemMeta(meta);
-        return item;
-    }
-    private ItemStack ButtonMoney$add(int count$0, int count$1) {
+    private ItemStack ButtonMoney$add(double count$0, double count$1) {
         ItemStack item = new ItemStack(Material.WOOD, 1);
         ItemMeta meta = item.getItemMeta();
 
@@ -96,7 +90,7 @@ public class InitButton {
         item.setItemMeta(meta);
         return item;
     }
-    private ItemStack ButtonMoney$show(int count$0) {
+    private ItemStack ButtonMoney$show(double count$0) {
         // TODO
         ItemStack item = null;
         return item;
