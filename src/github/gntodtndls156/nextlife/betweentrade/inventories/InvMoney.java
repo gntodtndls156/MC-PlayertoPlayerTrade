@@ -75,4 +75,8 @@ public class InvMoney {
     public void minus(int number) {
         this.sum -= number;
     }
+
+    public int getSum() {
+        return sum;
+    }
 }

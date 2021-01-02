@@ -27,7 +27,6 @@ public class InitPlayer implements Listener {
     public void onClickPlayerToPlayer(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
         Entity entity = event.getRightClicked();
-        System.out.println("onClickPlayerToPlayer" + player + entity); // TODO CHECK
         if (entity.getType() == EntityType.PLAYER) {
             if (player.isSneaking()) {
                 player.spigot().sendMessage(new ComponentBuilder(entity.getName()).color(ChatColor.YELLOW).append("에게 거래를 신청했습니다.").create());

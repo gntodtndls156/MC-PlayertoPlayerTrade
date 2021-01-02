@@ -27,8 +27,8 @@ public class InvTrade {
             inventory.setItem(count + (i * 9), line);
         }
 
-        inventory.setItem(39, InitPlayer.PLAYER_SKULL.get(playerMe));
-        inventory.setItem(41, InitPlayer.PLAYER_SKULL.get(playerYou));
+        inventory.setItem(39, InitPlayer.PLAYER_SKULL.get(playerMe.getName()));
+        inventory.setItem(41, InitPlayer.PLAYER_SKULL.get(playerYou.getName()));
 
         inventory.setItem(53, new InitButton(1).ButtonLock());
         inventory.setItem(45, new InitButton(3).ButtonLock());

@@ -8,19 +8,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class HandleMoney implements Listener {
-    private Map<String, Inventory> INVENTORY = new HashMap<>();
+    private static Map<String, InvMoney> MONEY = new HashMap<>();
     private InvMoney invMoney;
-    private Player player;
-    public HandleMoney(Player player, Inventory inventory) {
+
+    public HandleMoney(Player player) {
         invMoney = new InvMoney();
-        player.openInventory(invMoney.getInventory());
-        INVENTORY.put(player.getName(), inventory);
+        MONEY.put(player.getName(), invMoney);
+        player.openInventory(MONEY.get(player.getName()).getInventory());
     }
     public HandleMoney() {
 
@@ -30,27 +29,31 @@ public class HandleMoney implements Listener {
     public void onClickAtMoneyInventory(InventoryClickEvent event) {
         if (event.getInventory().getTitle().equals("Add Money Trade")) {
             event.setCancelled(true);
-
             if (event.getCurrentItem().getType() == Material.AIR) {
                 return;
             }
+
             ItemStack item = event.getCurrentItem();
-            ItemMeta meta = item.getItemMeta();
             Player player = (Player) event.getWhoClicked();
-            int increaseMoney = Integer.parseInt(meta.getDisplayName().replaceAll("[^\\d]", ""));
-
-            if (item.getType() == Material.STONE_BUTTON) {
-                invMoney.plus(increaseMoney);
-            } else if (item.getType() == Material.WOOD_BUTTON) {
-                invMoney.minus(increaseMoney);
-            } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals("Add to Trade")) {
-
-            } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals("Type in Vault")) {
-
-            } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals("Back")) {
+            if (item.getItemMeta().getDisplayName().equals("Add to Trade")) {
+                // TODO
+                return;
+            } else if (item.getItemMeta().getDisplayName().equals("Type in Vault")) {
+                // TODO
+                return;
+            } else if (item.getItemMeta().getDisplayName().equals("Back")) {
                 player.openInventory(HandleTrade.TRADE.get(HandleTrade.TRADE_KEY.get(player.getName())).getInventory());
-                // player.openInventory(INVENTORY.get(player.getName()));
+                return;
+            }
 
+            int increaseMoney = Integer.parseInt(item.getItemMeta().getDisplayName().replaceAll("[^0-9]", ""));
+            System.out.println(increaseMoney);
+            if (item.getType() == Material.STONE_BUTTON) {
+                MONEY.get(player.getName()).plus(increaseMoney);
+                System.out.println(MONEY.get(player.getName()).getSum());
+            } else if (item.getType() == Material.WOOD_BUTTON) {
+                MONEY.get(player.getName()).minus(increaseMoney);
+                System.out.println(MONEY.get(player.getName()).getSum());
             }
         }
     }
