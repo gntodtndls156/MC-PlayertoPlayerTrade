@@ -37,6 +37,8 @@ public class InvTrade {
         playerYou.openInventory(this.inventory);
     }
 
+
+
     public void setChecks(boolean[] checks) {
         this.checks = checks;
     }

@@ -21,7 +21,7 @@ public class HandleTrade implements Listener {
     protected static Map<String, String> TRADE_KEY = new HashMap<>();
 
     final int[] playerMeSlot = new int[]{0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
-    final int[] playerYouSlot = new int[]{5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 23, 24, 35};
+    final int[] playerYouSlot = new int[]{5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 33, 34, 35};
     final int[] lineLeft = new int[]{36, 37, 38};
     final int[] lineRight = new int[]{44, 43, 42};
     final int[] lineCenter = new int[]{40, 31, 22, 13, 4};

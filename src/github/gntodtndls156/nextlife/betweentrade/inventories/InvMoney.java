@@ -65,6 +65,19 @@ public class InvMoney {
     }
 
 
+    public ItemStack moneyToTrade() {
+        return new ItemStack(Material.GOLD_NUGGET) {
+            ItemMeta meta = this.getItemMeta();
+            public ItemStack money() {
+                meta.setLore(null);
+                meta.setDisplayName(sum + " Coins");
+
+                this.setItemMeta(meta);
+                return this;
+            }
+        }.money();
+    }
+
     public Inventory getInventory() {
         return inventory;
     }
