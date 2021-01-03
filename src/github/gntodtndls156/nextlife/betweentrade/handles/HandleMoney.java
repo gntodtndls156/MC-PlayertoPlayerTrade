@@ -5,7 +5,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,7 +18,7 @@ import java.util.Map;
 public class HandleMoney implements Listener {
     private static Map<String, InvMoney> MONEY = new HashMap<>();
     private InvMoney invMoney;
-
+    private boolean viewState = false;
     public HandleMoney(Player player) {
         invMoney = new InvMoney();
         MONEY.put(player.getName(), invMoney);
@@ -36,7 +39,6 @@ public class HandleMoney implements Listener {
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
             if (item.getItemMeta().getDisplayName().equals("Add to Trade")) {
-                // TODO
                 player.openInventory(HandleTrade.TRADE.get(HandleTrade.TRADE_KEY.get(player.getName())).getInventory());
                 int slot = addSlotMoney(player);
                 if (slot == -1) {
@@ -46,8 +48,11 @@ public class HandleMoney implements Listener {
                 HandleTrade.TRADE.get(HandleTrade.TRADE_KEY.get(player.getName())).getInventory().setItem(slot, MONEY.get(player.getName()).moneyToTrade());
                 reset(player);
                 return;
-            } else if (item.getItemMeta().getDisplayName().equals("Type in Vault")) {
+            } else if (item.getItemMeta().getDisplayName().equals("Type in Value")) {
                 // TODO
+                player.closeInventory();
+                player.sendTitle(unit(MONEY.get(player.getName()).getMoney()), "Left Click to close", 10, 999, 20);
+                viewState = true;
                 return;
             } else if (item.getItemMeta().getDisplayName().equals("Back")) {
                 player.openInventory(HandleTrade.TRADE.get(HandleTrade.TRADE_KEY.get(player.getName())).getInventory());
@@ -63,6 +68,25 @@ public class HandleMoney implements Listener {
                 MONEY.get(player.getName()).minus(increaseMoney);
                 System.out.println(MONEY.get(player.getName()).getSum());
             }
+        }
+    }
+    @EventHandler
+    public void VaultToMoneyInventory(PlayerInteractEvent interactEvent) {
+        interactEvent.getPlayer().sendMessage(String.valueOf(viewState));
+        if (viewState) {
+            Player player = interactEvent.getPlayer();
+            if (interactEvent.getAction() == Action.LEFT_CLICK_AIR) {
+                player.openInventory(MONEY.get(player.getName()).getInventory());
+                player.sendTitle("","",1, 1, 1);
+                viewState = false;
+                return;
+            }
+        }
+    }
+    @EventHandler
+    public void VaultToMoneyInventory(PlayerMoveEvent event) {
+        if (viewState) {
+            event.setCancelled(true);
         }
     }
 
@@ -82,6 +106,19 @@ public class HandleMoney implements Listener {
 
     private void reset(Player player) {
         MONEY.remove(player.getName());
+    }
+    private String unit(int money) {
+        StringBuffer s = new StringBuffer(String.valueOf(money));
+        s.reverse();
+        int i = 1;
+        while(i < s.length()) {
+            if (i % 3 == 0) {
+                s.insert(i, ",");
+            }
+            i++;
+        }
+        s.reverse();
+        return s.toString();
     }
     public Inventory openInventory() {
         return invMoney.getInventory();

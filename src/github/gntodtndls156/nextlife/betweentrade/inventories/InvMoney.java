@@ -92,4 +92,8 @@ public class InvMoney {
     public int getSum() {
         return sum;
     }
+
+    public int getMoney() {
+        return money;
+    }
 }
