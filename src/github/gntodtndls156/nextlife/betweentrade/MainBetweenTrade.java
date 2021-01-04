@@ -27,7 +27,7 @@ public class MainBetweenTrade extends JavaPlugin {
         // To register EVENTS
         getServer().getPluginManager().registerEvents(new HandleTrade(this), this);
         getServer().getPluginManager().registerEvents(new InitPlayer(), this);
-        getServer().getPluginManager().registerEvents(new HandleMoney(), this);
+        getServer().getPluginManager().registerEvents(new HandleMoney(this), this);
         // TO register COMMANDS
         this.getCommand("betweenTrade").setExecutor(new BetweenTradeCommand());
         // TO connect Plugin "Vault"

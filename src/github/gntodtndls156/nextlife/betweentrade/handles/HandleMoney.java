@@ -1,5 +1,6 @@
 package github.gntodtndls156.nextlife.betweentrade.handles;
 
+import github.gntodtndls156.nextlife.betweentrade.MainBetweenTrade;
 import github.gntodtndls156.nextlife.betweentrade.inventories.InvMoney;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,14 +19,15 @@ public class HandleMoney implements Listener {
     private static Map<String, InvMoney> MONEY = new HashMap<>();
     private InvMoney invMoney;
     private boolean viewState = false;
-
-    public HandleMoney(Player player, int money) {
+    private MainBetweenTrade plugin;
+    public HandleMoney(Player player, int money, MainBetweenTrade plugin) {
         invMoney = new InvMoney(money);
         MONEY.put(player.getName(), invMoney);
         player.openInventory(MONEY.get(player.getName()).getInventory());
-
     }
-    public HandleMoney() {}
+    public HandleMoney(MainBetweenTrade plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onClickAtMoneyInventory(InventoryClickEvent event) {
@@ -45,8 +47,10 @@ public class HandleMoney implements Listener {
                     player.sendMessage("FULL SLOT.");
                     return;
                 }
+                plugin.getEconomy().withdrawPlayer(player, MONEY.get(player.getName()).getSum());
+                System.out.println(player.getName() + " " + plugin.getEconomy().getBalance(player));
                 HandleTrade.TRADE.get(HandleTrade.TRADE_KEY.get(player.getName())).getInventory().setItem(slot, MONEY.get(player.getName()).moneyToTrade());
-                reset(player);
+                remove(player);
                 return;
             } else if (item.getItemMeta().getDisplayName().equals("Type in Value")) {
                 // TODO
@@ -56,6 +60,7 @@ public class HandleMoney implements Listener {
                 return;
             } else if (item.getItemMeta().getDisplayName().equals("Back")) {
                 player.openInventory(HandleTrade.TRADE.get(HandleTrade.TRADE_KEY.get(player.getName())).getInventory());
+                remove(player);
                 return;
             }
 
@@ -108,13 +113,13 @@ public class HandleMoney implements Listener {
         return -1;
     }
 
-    private void reset(Player player) {
+    private void remove(Player player) {
         MONEY.remove(player.getName());
     }
     private void reload(Player player) {
         MONEY.get(player.getName()).button$reset();
     }
-    private String unit(int money) {
+    public String unit(int money) {
         StringBuffer s = new StringBuffer(String.valueOf(money));
         s.reverse();
         int i = 0;

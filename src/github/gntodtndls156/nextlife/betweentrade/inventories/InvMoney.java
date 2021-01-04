@@ -10,12 +10,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 
 public class InvMoney {
-    // private Economy economy = new MainBetweenTrade().getEconomy();
     private Inventory inventory;
     private int money;// how much are you have money?
-    private int sum = 10; // sum
-//    private int minus = 10;
-//    private int plus = 10;
+    private int sum = 10;
 
     public InvMoney (int money) {
         setMoney(money);

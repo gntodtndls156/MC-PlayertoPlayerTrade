@@ -93,7 +93,6 @@ public class HandleTrade implements Listener {
                         }
                 }
             }
-
             if (event.getRawSlot() == 45) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals("돈 거래")) {
                     int money = (int) plugin.getEconomy().getBalance(player);
@@ -102,7 +101,7 @@ public class HandleTrade implements Listener {
                         player.sendMessage("당신은 돈이 없습니다.");
                         return;
                     }
-                    HandleMoney handleMoney = new HandleMoney(player, money);
+                    new HandleMoney(player, money, plugin);
                 }
             }
 
@@ -118,6 +117,12 @@ public class HandleTrade implements Listener {
                     for (int i = 0; i <= 35; i++) {
                         if (event.getWhoClicked().getInventory().getContents()[i] == null && //
                                 IntStream.of(TRADE.get(TRADE_KEY$get).getPlayerMe().getName().equals(player$name) ? playerMeSlot : playerYouSlot).anyMatch(slot -> slot == event.getSlot())) {
+                            if (event.getCurrentItem().getType() == Material.GOLD_NUGGET) {
+                                plugin.getEconomy().depositPlayer(player, Integer.parseInt(event.getCurrentItem().getItemMeta().getDisplayName().replaceAll("[^0-9]", "")));
+                                TRADE.get(TRADE_KEY$get).getInventory().setItem(event.getSlot(), new ItemStack(Material.AIR));
+                                System.out.println(player.getName() + " " + plugin.getEconomy().getBalance(player));
+                                break;
+                            }
                             event.getWhoClicked().getInventory().setItem(i, event.getCurrentItem());
                             TRADE.get(TRADE_KEY$get).getInventory().setItem(event.getSlot(), new ItemStack(Material.AIR));
                         }
