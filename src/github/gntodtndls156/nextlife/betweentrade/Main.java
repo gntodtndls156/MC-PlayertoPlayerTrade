@@ -1,6 +1,9 @@
 package github.gntodtndls156.nextlife.betweentrade;
 
 import github.gntodtndls156.nextlife.betweentrade.command.CommandbetweenTrade;
+import github.gntodtndls156.nextlife.betweentrade.handle.HandleMoney;
+import github.gntodtndls156.nextlife.betweentrade.handle.HandlePlayer;
+import github.gntodtndls156.nextlife.betweentrade.handle.HandleTrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -19,7 +22,6 @@ public class Main extends JavaPlugin {
         EVENTS();
         COMMANDS();
 
-
     }
 
     // VARIABLES
@@ -27,9 +29,9 @@ public class Main extends JavaPlugin {
 
 
     private void EVENTS() {
-        getServer().getPluginManager().registerEvents();
-        getServer().getPluginManager().registerEvents();
-        getServer().getPluginManager().registerEvents();
+        getServer().getPluginManager().registerEvents(new HandleMoney(), this);
+        getServer().getPluginManager().registerEvents(new HandlePlayer(), this);
+        getServer().getPluginManager().registerEvents(new HandleTrade(this), this);
     }
     private void COMMANDS() {
         this.getCommand("betweenTrade").setExecutor(new CommandbetweenTrade());

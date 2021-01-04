@@ -10,7 +10,7 @@ public class CommandbetweenTrade implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (strings.length >= 2) {
             if (OnlinePlayerCheck(strings[0]) && OnlinePlayerCheck(strings[1])) {
-
+                // TODO - 인벤토리 연결
             }
         }
 

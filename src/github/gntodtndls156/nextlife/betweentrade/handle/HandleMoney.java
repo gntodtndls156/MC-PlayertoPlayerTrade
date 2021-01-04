@@ -1,4 +1,6 @@
 package github.gntodtndls156.nextlife.betweentrade.handle;
 
-public class HandleMoney {
+import org.bukkit.event.Listener;
+
+public class HandleMoney implements Listener {
 }
