@@ -1,6 +1,5 @@
 package github.gntodtndls156.nextlife.betweentrade.inv;
 
-import github.gntodtndls156.nextlife.betweentrade.Main;
 import github.gntodtndls156.nextlife.betweentrade.init.InitButton;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -99,5 +98,13 @@ public class InvTrade {
     }
     public int[] getPlayerYouSlot() {
         return playerYouSlot;
+    }
+
+    public Player getPlayer$0() {
+        return player$0;
+    }
+
+    public Player getPlayer$1() {
+        return player$1;
     }
 }

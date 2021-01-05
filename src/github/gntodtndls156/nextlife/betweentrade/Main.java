@@ -37,8 +37,6 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new HandleMoney(this), this);
         getServer().getPluginManager().registerEvents(new HandlePlayer(), this);
         getServer().getPluginManager().registerEvents(new HandleTrade(this), this);
-        
-        // 
     }
     private void COMMANDS() {
         this.getCommand("betweenTrade").setExecutor(new CommandBetweenTrade());

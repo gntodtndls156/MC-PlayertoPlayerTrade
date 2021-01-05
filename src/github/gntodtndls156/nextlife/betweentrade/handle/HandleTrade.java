@@ -2,6 +2,7 @@ package github.gntodtndls156.nextlife.betweentrade.handle;
 
 import github.gntodtndls156.nextlife.betweentrade.Main;
 import github.gntodtndls156.nextlife.betweentrade.init.InitButton;
+import github.gntodtndls156.nextlife.betweentrade.init.InitPlayer;
 import github.gntodtndls156.nextlife.betweentrade.inv.InvTrade;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.text.SimpleDateFormat;
@@ -22,7 +24,6 @@ public class HandleTrade implements Listener {
     protected static Map<String, InvTrade> TRADE = new HashMap<>();
     protected static Map<Player, String> TRADE_KEY = new HashMap<>();
 
-    private Player player;
     private InvTrade invTrade;
     private Main plugin;
     public HandleTrade(Main plugin) {
@@ -35,8 +36,26 @@ public class HandleTrade implements Listener {
 
         TRADE_KEY.put(player$0, KEY);
         TRADE_KEY.put(player$1, KEY);
+        invTrade = new InvTrade(player$0, player$1);
+        TRADE.put(KEY, invTrade);
+    }
 
-        TRADE.put(KEY, new InvTrade(player$0, player$1));
+    @EventHandler
+    public void onOpenTradeInventory(InventoryOpenEvent event) {
+        if (event.getInventory().getTitle().equals("Player To Player Trade")) {
+            Player player = (Player) event.getPlayer();
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                invTrade.getInventory().setItem(39, InitPlayer.playerItemStackMap.get(TRADE.get(TRADE_KEY.get(player)).getPlayer$0())); // ERROR !
+                invTrade.getInventory().setItem(41, InitPlayer.playerItemStackMap.get(TRADE.get(TRADE_KEY.get(player)).getPlayer$1()));
+
+                /*
+                 TODO ERROR ▼
+                java.lang.NullPointerException: null
+                at github.gntodtndls156.nextlife.betweentrade.handle.HandleTrade.lambda$onOpenTradeInventory$0(HandleTrade.java:48) ~[?:?]
+
+                 */
+            });
+        }
     }
 
     @EventHandler
@@ -47,7 +66,7 @@ public class HandleTrade implements Listener {
                 return;
             }
 
-            player = (Player) event.getWhoClicked();
+            Player player = (Player) event.getWhoClicked();
             invTrade = TRADE.get(TRADE_KEY.get(player));
 
             if (event.getRawSlot() == 53) {
@@ -59,6 +78,7 @@ public class HandleTrade implements Listener {
                         for (int i = 0; i < 3; i++) {
                             int finalI = i;
                             Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                                System.out.println(player);
                                 invTrade.getInventory().setItem(
                                         invTrade.isPlayer$0Equals(player) ? invTrade.getLineLeft()[finalI] : invTrade.getLineRight()[finalI],
                                         invTrade.line(12)
@@ -73,7 +93,6 @@ public class HandleTrade implements Listener {
                                     if (invTrade.isMeLock() && invTrade.isYouLock()) {
                                         changeLine(12, event, true);
                                     }
-
                                 }
                             }, (1 + i) * 7L);
                         }
