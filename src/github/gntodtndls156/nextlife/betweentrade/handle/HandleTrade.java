@@ -4,6 +4,7 @@ import github.gntodtndls156.nextlife.betweentrade.Main;
 import github.gntodtndls156.nextlife.betweentrade.init.InitButton;
 import github.gntodtndls156.nextlife.betweentrade.inv.InvTrade;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,14 +16,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class HandleTrade implements Listener {
     protected static Map<String, InvTrade> TRADE = new HashMap<>();
     protected static Map<Player, String> TRADE_KEY = new HashMap<>();
 
     private Player player;
-    private String player$name;
-    private String TRADE_KEY$get;
     private InvTrade invTrade;
     private Main plugin;
     public HandleTrade(Main plugin) {
@@ -42,15 +42,13 @@ public class HandleTrade implements Listener {
     @EventHandler
     public void onClickAtTradeInventory(InventoryClickEvent event) {
         if (event.getInventory().getTitle().equals("Player To Player Trade")) {
+            event.setCancelled(true);
             if (event.isShiftClick()) {
                 return;
             }
-            event.setCancelled(true);
 
             player = (Player) event.getWhoClicked();
-            player$name = player.getName();
-            TRADE_KEY$get = TRADE_KEY.get(player$name);
-            invTrade = TRADE.get(TRADE_KEY$get);
+            invTrade = TRADE.get(TRADE_KEY.get(player));
 
             if (event.getRawSlot() == 53) {
                 ItemStack Button = event.getCurrentItem();
@@ -111,9 +109,40 @@ public class HandleTrade implements Listener {
                         player.sendMessage("잔고가 비어있습니다.");
                         return;
                     }
-                    // TODO
-                    new HandleMoney();
+                    new HandleMoney(player, money);
                 }
+            }
+
+            if (event.getCurrentItem().getType() == Material.AIR ||
+                    Arrays.stream(new int[]{4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53}).anyMatch(slot -> slot == event.getSlot())) {
+                return;
+            }
+
+            switch(event.getClickedInventory().getType()) {
+                case CHEST:
+                    for (int i = 0; i < 35; i++) {
+                        if (player.getInventory().getContents()[i] == null &&
+                                IntStream.of(invTrade.isPlayer$0Equals(player) ? invTrade.getPlayerMeSlot() : invTrade.getPlayerYouSlot()).anyMatch(slot -> slot == event.getSlot())) {
+                            reset();
+                            if (event.getCurrentItem().getType() == Material.GOLD_NUGGET) {
+                                plugin.getEconomy().depositPlayer(player, Integer.parseInt(event.getCurrentItem().getItemMeta().getDisplayName().replaceAll("[^0-9]", "")));
+                                invTrade.getInventory().setItem(event.getSlot(), new ItemStack(Material.AIR));
+                                break;
+                            }
+                            player.getInventory().setItem(i, event.getCurrentItem());
+                            invTrade.getInventory().setItem(event.getSlot(), new ItemStack(Material.AIR));
+                        }
+                    }
+                    break;
+                case PLAYER:
+                    final int[] slot = invTrade.isPlayer$0Equals(player) ? invTrade.getPlayerMeSlot() : invTrade.getPlayerYouSlot();
+                    for (int i = 0; i < 16; i++) {
+                        if (invTrade.getInventory().getContents()[slot[i]] == null) {
+                            reset();
+                            invTrade.getInventory().setItem(slot[i], event.getCurrentItem());
+                            player.getInventory().setItem(event.getSlot(), new ItemStack(Material.AIR));
+                        }
+                    }
             }
         }
     }
@@ -129,7 +158,7 @@ public class HandleTrade implements Listener {
                     if (state) {
                         invTrade.getInventory().setItem(53, new InitButton(2).ButtonLock());
                     } else {
-                        // TODO
+                        success(event);
                     }
                 }
             }, (i + 1) * 7L);

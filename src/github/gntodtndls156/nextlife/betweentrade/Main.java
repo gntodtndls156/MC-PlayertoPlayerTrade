@@ -1,10 +1,9 @@
 package github.gntodtndls156.nextlife.betweentrade;
 
-import github.gntodtndls156.nextlife.betweentrade.command.CommandbetweenTrade;
+import github.gntodtndls156.nextlife.betweentrade.command.CommandBetweenTrade;
 import github.gntodtndls156.nextlife.betweentrade.handle.HandleMoney;
 import github.gntodtndls156.nextlife.betweentrade.handle.HandlePlayer;
 import github.gntodtndls156.nextlife.betweentrade.handle.HandleTrade;
-import github.gntodtndls156.nextlife.betweentrade.inv.InvTrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -20,9 +19,10 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         super.onEnable();
 
-        if (setupEconomy()) {
-            getLogger().info("Economy 관련 플러그인이 설치되어 있지 않습니다.");
-            Bukkit.getPluginManager().disablePlugin(this);
+        if (!setupEconomy()) {
+            getLogger().info("경제 관련 플러그인이 설치되어 있지 않습니다.");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
         }
 
         EVENTS();
@@ -30,18 +30,18 @@ public class Main extends JavaPlugin {
 
     }
 
+    // VARIABLES
     private Economy economy;
 
     private void EVENTS() {
-        getServer().getPluginManager().registerEvents(new HandleMoney(), this);
+        getServer().getPluginManager().registerEvents(new HandleMoney(this), this);
         getServer().getPluginManager().registerEvents(new HandlePlayer(), this);
         getServer().getPluginManager().registerEvents(new HandleTrade(this), this);
-
-        // Scheduler
-        new InvTrade(this);
+        
+        // 
     }
     private void COMMANDS() {
-        this.getCommand("betweenTrade").setExecutor(new CommandbetweenTrade());
+        this.getCommand("betweenTrade").setExecutor(new CommandBetweenTrade());
     }
 
     private boolean setupEconomy() {

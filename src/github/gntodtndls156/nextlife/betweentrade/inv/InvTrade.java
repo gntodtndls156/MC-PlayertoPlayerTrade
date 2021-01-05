@@ -5,7 +5,6 @@ import github.gntodtndls156.nextlife.betweentrade.init.InitButton;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,10 +19,6 @@ public class InvTrade {
     final int[] lineRight = new int[]{44, 43, 42};
     final int[] lineCenter = new int[]{40, 31, 22, 13, 4};
 
-    private Main plugin;
-    public InvTrade(Main plugin) {
-        this.plugin = plugin;
-    }
     public InvTrade(Player player$0, Player player$1) {
         this.player$0 = player$0;
         this.player$1 = player$1;
@@ -36,12 +31,9 @@ public class InvTrade {
             inventory.setItem(9 * 4 + i, line);
         for (int i = 0; i < 4; i++)
             inventory.setItem(4 + (i * 9), line);
-        // TODO - Player SKULL, InitButton
-//        inventory.setItem(39, );
-//        inventory.setItem(41, );
 
-//        inventory.setItem(53, new InitButton(1).ButtonLock());
-//        inventory.setItem(45, new InitButton(3).ButtonLock());
+        inventory.setItem(53, new InitButton(1).ButtonLock());
+        inventory.setItem(45, new InitButton(8).ButtonLock());
 
         openInventory();
     }
