@@ -4,6 +4,7 @@ import github.gntodtndls156.nextlife.betweentrade.command.CommandbetweenTrade;
 import github.gntodtndls156.nextlife.betweentrade.handle.HandleMoney;
 import github.gntodtndls156.nextlife.betweentrade.handle.HandlePlayer;
 import github.gntodtndls156.nextlife.betweentrade.handle.HandleTrade;
+import github.gntodtndls156.nextlife.betweentrade.inv.InvTrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -19,19 +20,25 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         super.onEnable();
 
+        if (setupEconomy()) {
+            getLogger().info("Economy 관련 플러그인이 설치되어 있지 않습니다.");
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
+
         EVENTS();
         COMMANDS();
 
     }
 
-    // VARIABLES
     private Economy economy;
-
 
     private void EVENTS() {
         getServer().getPluginManager().registerEvents(new HandleMoney(), this);
         getServer().getPluginManager().registerEvents(new HandlePlayer(), this);
         getServer().getPluginManager().registerEvents(new HandleTrade(this), this);
+
+        // Scheduler
+        new InvTrade(this);
     }
     private void COMMANDS() {
         this.getCommand("betweenTrade").setExecutor(new CommandbetweenTrade());
@@ -49,5 +56,9 @@ public class Main extends JavaPlugin {
 
         economy = rsp.getProvider();
         return economy != null;
+    }
+
+    public Economy getEconomy() {
+        return economy;
     }
 }
