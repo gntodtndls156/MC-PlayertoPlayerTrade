@@ -54,6 +54,10 @@ public class InitButton {
                 return Button("돈 거래",
                         new String[]{"돈을 얼만큼 주고 받을지 요구합니다."},
                         Material.GOLD_NUGGET);
+            case 9: // InvTrade
+                return Button("닫기",
+                        new String[]{"거래를 종료합니다."},
+                        Material.BOAT);
         }
         return new ItemStack(Material.AIR);
     }

@@ -11,6 +11,7 @@ public class InvTrade {
     private Inventory inventory;
     private boolean[] checks = new boolean[4];
     private Player player$0, player$1;
+    private boolean[] gotoMoney = new boolean[2];
 
     final int[] playerMeSlot = new int[]{0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
     final int[] playerYouSlot = new int[]{5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 33, 34, 35};
@@ -21,7 +22,6 @@ public class InvTrade {
     public InvTrade(Player player$0, Player player$1) {
         this.player$0 = player$0;
         this.player$1 = player$1;
-
         // setting Inventory
         this.inventory = Bukkit.createInventory(null, 9 * 6, "Player To Player Trade");
         ItemStack line = line(1);
@@ -33,6 +33,8 @@ public class InvTrade {
 
         inventory.setItem(53, new InitButton(1).ButtonLock());
         inventory.setItem(45, new InitButton(8).ButtonLock());
+
+        inventory.setItem(47, new InitButton(9).ButtonLock());
 
         openInventory();
     }
@@ -76,6 +78,19 @@ public class InvTrade {
     }
     public void setYouAccept(boolean state) {
         this.checks[3] = state;
+    }
+
+    public boolean isMeGotoMoney() {
+        return gotoMoney[0];
+    }
+    public boolean isYouGotoMoney() {
+        return gotoMoney[1];
+    }
+    public void setMeGotoMoney(boolean state) {
+        this.gotoMoney[0] = state;
+    }
+    public void setYouGotoMoney(boolean state) {
+        this.gotoMoney[1] = state;
     }
 
     public boolean isPlayer$0Equals(Player player) {

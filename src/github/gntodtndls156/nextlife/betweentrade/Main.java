@@ -35,7 +35,7 @@ public class Main extends JavaPlugin {
 
     private void EVENTS() {
         getServer().getPluginManager().registerEvents(new HandleMoney(this), this);
-        getServer().getPluginManager().registerEvents(new HandlePlayer(), this);
+        getServer().getPluginManager().registerEvents(new HandlePlayer(this), this);
         getServer().getPluginManager().registerEvents(new HandleTrade(this), this);
     }
     private void COMMANDS() {

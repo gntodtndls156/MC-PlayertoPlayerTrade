@@ -2,16 +2,19 @@ package github.gntodtndls156.nextlife.betweentrade.handle;
 
 import github.gntodtndls156.nextlife.betweentrade.Main;
 import github.gntodtndls156.nextlife.betweentrade.init.InitButton;
-import github.gntodtndls156.nextlife.betweentrade.init.InitPlayer;
 import github.gntodtndls156.nextlife.betweentrade.inv.InvTrade;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.SkullType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -44,17 +47,63 @@ public class HandleTrade implements Listener {
     public void onOpenTradeInventory(InventoryOpenEvent event) {
         if (event.getInventory().getTitle().equals("Player To Player Trade")) {
             Player player = (Player) event.getPlayer();
+            Inventory inventory = event.getInventory();
+
             Bukkit.getScheduler().runTask(plugin, () -> {
-                invTrade.getInventory().setItem(39, InitPlayer.playerItemStackMap.get(TRADE.get(TRADE_KEY.get(player)).getPlayer$0())); // ERROR !
-                invTrade.getInventory().setItem(41, InitPlayer.playerItemStackMap.get(TRADE.get(TRADE_KEY.get(player)).getPlayer$1()));
-
-                /*
-                 TODO ERROR ▼
-                java.lang.NullPointerException: null
-                at github.gntodtndls156.nextlife.betweentrade.handle.HandleTrade.lambda$onOpenTradeInventory$0(HandleTrade.java:48) ~[?:?]
-
-                 */
+                if (TRADE.get(TRADE_KEY.get(player)).isPlayer$0Equals(player)) {
+                    TRADE.get(TRADE_KEY.get(player)).setMeGotoMoney(false);
+                } else {
+                    TRADE.get(TRADE_KEY.get(player)).setYouGotoMoney(false);
+                }
             });
+            Bukkit.getScheduler().runTask(plugin, () -> inventory.setItem(TRADE.get(TRADE_KEY.get(player)).isPlayer$0Equals(player) ? 39 : 41, new ItemStack() {
+                public ItemStack getSkull() {
+                    ItemStack item = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
+                    SkullMeta meta = (SkullMeta) item.getItemMeta();
+                    meta.setOwningPlayer(player);
+                    item.setItemMeta(meta);
+
+                    return item;
+                }
+            }.getSkull()));
+        }
+    }
+    @EventHandler
+    public void onOpenMoneyInventory(InventoryOpenEvent event) {
+        if (event.getInventory().getTitle().equals("Add Money Trade")) {
+            Player player = (Player) event.getPlayer();
+            InvTrade invTrade = TRADE.get(TRADE_KEY.get(player));
+
+            if (invTrade.isPlayer$0Equals(player)) {
+                invTrade.setMeGotoMoney(true);
+            } else {
+                invTrade.setYouGotoMoney(true);
+            }
+        }
+    }
+    @EventHandler
+    public void onCloseTradeInventory(InventoryCloseEvent event) {
+        if (event.getInventory().getTitle().equals("Player To Player Trade")) {
+            Player player = (Player) event.getPlayer();
+            InvTrade invTrade = TRADE.get(TRADE_KEY.get(player));
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (invTrade.isPlayer$0Equals(player)) {
+                    if (invTrade.isMeGotoMoney()) {
+                        return;
+                    }
+                } else {
+                    if (invTrade.isYouGotoMoney()) {
+                        return;
+                    }
+                }
+
+                invTrade.getPlayer$1().closeInventory();
+                invTrade.getPlayer$0().closeInventory();
+
+                TRADE.remove(TRADE_KEY.get(player));
+                TRADE_KEY.remove(invTrade.getPlayer$0());
+                TRADE_KEY.remove(invTrade.getPlayer$1());
+            }, 5L);
         }
     }
 
@@ -129,6 +178,17 @@ public class HandleTrade implements Listener {
                         return;
                     }
                     new HandleMoney(player, money);
+                }
+            }
+
+            if (event.getRawSlot() == 47) {
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals("닫기")) {
+                    invTrade.getPlayer$0().closeInventory();
+                    invTrade.getPlayer$1().closeInventory();
+
+                    TRADE.remove(TRADE_KEY.get(player));
+                    TRADE_KEY.remove(invTrade.getPlayer$0());
+                    TRADE_KEY.remove(invTrade.getPlayer$1());
                 }
             }
 

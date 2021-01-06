@@ -7,5 +7,5 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InitPlayer {
-    public static Map<Player, ItemStack> playerItemStackMap = new HashMap<>();
+//    public static Map<Player, ItemStack> playerItemStackMap = new HashMap<>();
 }
