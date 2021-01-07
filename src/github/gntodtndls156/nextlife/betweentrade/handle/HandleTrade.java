@@ -92,16 +92,18 @@ public class HandleTrade implements Listener {
                     if (inventoryItems[invTrade.getPlayerMeSlot()[i]] != null) {
                         if (inventoryItems[invTrade.getPlayerMeSlot()[i]].getType() == Material.GOLD_NUGGET) {
                             plugin.getEconomy().depositPlayer(invTrade.getPlayer$0(), Integer.parseInt(inventoryItems[invTrade.getPlayerMeSlot()[i]].getItemMeta().getDisplayName().replaceAll("[^0-9]", "")));
-                            invTrade.getInventory().setItem(i, new ItemStack(Material.AIR));
+                        } else {
+                            items$0.add(inventoryItems[invTrade.getPlayerMeSlot()[i]]);
                         }
-                        items$0.add(inventoryItems[invTrade.getPlayerMeSlot()[i]]);
+                        invTrade.getInventory().setItem(invTrade.getPlayerMeSlot()[i], new ItemStack(Material.AIR));
                     }
                     if (inventoryItems[invTrade.getPlayerYouSlot()[i]] != null) {
                         if (inventoryItems[invTrade.getPlayerYouSlot()[i]].getType() == Material.GOLD_NUGGET) {
                             plugin.getEconomy().depositPlayer(invTrade.getPlayer$1(), Integer.parseInt(inventoryItems[invTrade.getPlayerYouSlot()[i]].getItemMeta().getDisplayName().replaceAll("[^0-9]", "")));
-                            invTrade.getInventory().setItem(i, new ItemStack(Material.AIR));
+                        } else {
+                            items$1.add(inventoryItems[invTrade.getPlayerYouSlot()[i]]);
                         }
-                        items$1.add(inventoryItems[invTrade.getPlayerYouSlot()[i]]);
+                        invTrade.getInventory().setItem(invTrade.getPlayerYouSlot()[i], new ItemStack(Material.AIR));
                     }
                 }
                 int j = 0, k = 0;
@@ -132,7 +134,7 @@ public class HandleTrade implements Listener {
 //                        }
 //                    }
 //                }
-                
+
                 TRADE.remove(TRADE_KEY.get(player));
                 TRADE_KEY.remove(invTrade.getPlayer$0());
                 TRADE_KEY.remove(invTrade.getPlayer$1());
@@ -226,7 +228,7 @@ public class HandleTrade implements Listener {
             }
 
             if (event.getCurrentItem().getType() == Material.AIR ||
-                    Arrays.stream(new int[]{4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53}).anyMatch(slot -> slot == event.getSlot())) {
+                    Arrays.stream(new int[]{4, 13, 22, 31, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53}).anyMatch(slot -> slot == event.getRawSlot())) {
                 return;
             }
 

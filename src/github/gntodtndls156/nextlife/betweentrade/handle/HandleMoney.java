@@ -3,8 +3,10 @@ package github.gntodtndls156.nextlife.betweentrade.handle;
 import github.gntodtndls156.nextlife.betweentrade.Main;
 import github.gntodtndls156.nextlife.betweentrade.inv.InvMoney;
 import github.gntodtndls156.nextlife.betweentrade.inv.InvTrade;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -21,7 +23,6 @@ import java.util.Map;
 public class HandleMoney implements Listener {
     private static Map<Player, InvMoney> MONEY = new HashMap<>();
     private Main plugin;
-    private Player player;
     private boolean viewState = false;
 
     public HandleMoney(Player player , int money) {
@@ -46,13 +47,20 @@ public class HandleMoney implements Listener {
             }
         }
     }
-//    @EventHandler
-//    public void onCloseMoneyInventory(InventoryCloseEvent event) {
-//        if (event.getInventory().getTitle().equals("Add Money Trade")) {
-//            Player player = (Player) event.getPlayer();
-//            player.openInventory(MONEY.get(player).getInventory());
-//        }
-//    }
+    @EventHandler
+    public void onCloseMoneyInventory(InventoryCloseEvent event) {
+        if (event.getInventory().getTitle().equals("Add Money Trade")) {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                Player player = (Player) event.getPlayer();
+                try {
+                    player.openInventory(MONEY.get(player).getInventory());
+                } catch (NullPointerException exception) {
+                    // TODO
+                }
+            }, 1L);
+
+        }
+    }
 
     @EventHandler
     public void onClickAtMoneyInventory(InventoryClickEvent event) {

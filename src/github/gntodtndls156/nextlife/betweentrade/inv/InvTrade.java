@@ -12,6 +12,7 @@ public class InvTrade {
     private boolean[] checks = new boolean[4];
     private Player player$0, player$1;
     private boolean[] gotoMoney = new boolean[2];
+    private
 
     final int[] playerMeSlot = new int[]{0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30};
     final int[] playerYouSlot = new int[]{5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26, 32, 33, 34, 35};
