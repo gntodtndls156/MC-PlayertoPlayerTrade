@@ -17,10 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class HandleTrade implements Listener {
@@ -68,19 +65,7 @@ public class HandleTrade implements Listener {
             }.getSkull()));
         }
     }
-    @EventHandler
-    public void onOpenMoneyInventory(InventoryOpenEvent event) {
-        if (event.getInventory().getTitle().equals("Add Money Trade")) {
-            Player player = (Player) event.getPlayer();
-            InvTrade invTrade = TRADE.get(TRADE_KEY.get(player));
 
-            if (invTrade.isPlayer$0Equals(player)) {
-                invTrade.setMeGotoMoney(true);
-            } else {
-                invTrade.setYouGotoMoney(true);
-            }
-        }
-    }
     @EventHandler
     public void onCloseTradeInventory(InventoryCloseEvent event) {
         if (event.getInventory().getTitle().equals("Player To Player Trade")) {
@@ -96,10 +81,58 @@ public class HandleTrade implements Listener {
                         return;
                     }
                 }
-
                 invTrade.getPlayer$1().closeInventory();
                 invTrade.getPlayer$0().closeInventory();
 
+                // move Trade to player inventory
+                List<ItemStack> items$0 = new ArrayList<>();
+                List<ItemStack> items$1 = new ArrayList<>();
+                ItemStack[] inventoryItems = invTrade.getInventory().getContents();
+                for (int i = 0; i < 16; i++) {
+                    if (inventoryItems[invTrade.getPlayerMeSlot()[i]] != null) {
+                        if (inventoryItems[invTrade.getPlayerMeSlot()[i]].getType() == Material.GOLD_NUGGET) {
+                            plugin.getEconomy().depositPlayer(invTrade.getPlayer$0(), Integer.parseInt(inventoryItems[invTrade.getPlayerMeSlot()[i]].getItemMeta().getDisplayName().replaceAll("[^0-9]", "")));
+                            invTrade.getInventory().setItem(i, new ItemStack(Material.AIR));
+                        }
+                        items$0.add(inventoryItems[invTrade.getPlayerMeSlot()[i]]);
+                    }
+                    if (inventoryItems[invTrade.getPlayerYouSlot()[i]] != null) {
+                        if (inventoryItems[invTrade.getPlayerYouSlot()[i]].getType() == Material.GOLD_NUGGET) {
+                            plugin.getEconomy().depositPlayer(invTrade.getPlayer$1(), Integer.parseInt(inventoryItems[invTrade.getPlayerYouSlot()[i]].getItemMeta().getDisplayName().replaceAll("[^0-9]", "")));
+                            invTrade.getInventory().setItem(i, new ItemStack(Material.AIR));
+                        }
+                        items$1.add(inventoryItems[invTrade.getPlayerYouSlot()[i]]);
+                    }
+                }
+                int j = 0, k = 0;
+                Iterator<ItemStack> iterator$0 = items$0.listIterator();
+                Iterator<ItemStack> iterator$1 = items$1.listIterator();
+                for (int i = 0; i <= 35; i++) {
+                    if (invTrade.getPlayer$0().getInventory().getContents()[i] == null && iterator$0.hasNext()) {
+                        invTrade.getPlayer$0().getInventory().setItem(i, iterator$0.next());
+                        j++;
+                    }
+                    if (invTrade.getPlayer$1().getInventory().getContents()[i] == null && iterator$1.hasNext()) {
+                        invTrade.getPlayer$1().getInventory().setItem(i, iterator$1.next());
+                        k++;
+                    }
+                }
+//                ItemStack[] itemStacks = event.getInventory().getContents();
+//                int[] slot = invTrade.isPlayer$0Equals(player) ? invTrade.getPlayerMeSlot() : invTrade.getPlayerYouSlot();
+//                for (int i = 0; i <= 35; i++) {
+//                    if (player.getInventory().getContents()[i] == null) {
+//                        for (int j = 0; j < 16; j++) {
+//                            if (itemStacks[slot[j]].getType() == Material.GOLD_NUGGET) {
+//                                plugin.getEconomy().depositPlayer(player, Integer.parseInt(itemStacks[i].getItemMeta().getDisplayName().replaceAll("[^0-9]", "")));
+//                                event.getInventory().setItem(i, new ItemStack(Material.AIR));
+//                            }
+//                            player.getInventory().setItem(i, itemStacks[slot[j]]);
+//                            invTrade.getInventory().setItem(slot[j], new ItemStack(Material.AIR));
+//                            break;
+//                        }
+//                    }
+//                }
+                
                 TRADE.remove(TRADE_KEY.get(player));
                 TRADE_KEY.remove(invTrade.getPlayer$0());
                 TRADE_KEY.remove(invTrade.getPlayer$1());

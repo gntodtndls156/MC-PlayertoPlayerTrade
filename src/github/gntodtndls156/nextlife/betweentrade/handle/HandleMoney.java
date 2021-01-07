@@ -2,12 +2,15 @@ package github.gntodtndls156.nextlife.betweentrade.handle;
 
 import github.gntodtndls156.nextlife.betweentrade.Main;
 import github.gntodtndls156.nextlife.betweentrade.inv.InvMoney;
+import github.gntodtndls156.nextlife.betweentrade.inv.InvTrade;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -29,6 +32,27 @@ public class HandleMoney implements Listener {
     public HandleMoney(Main plugin){
         this.plugin = plugin;
     }
+
+    @EventHandler
+    public void onOpenMoneyInventory(InventoryOpenEvent event) {
+        if (event.getInventory().getTitle().equals("Add Money Trade")) {
+            Player player = (Player) event.getPlayer();
+            InvTrade invTrade = HandleTrade.TRADE.get(HandleTrade.TRADE_KEY.get(player));
+
+            if (invTrade.isPlayer$0Equals(player)) {
+                invTrade.setMeGotoMoney(true);
+            } else {
+                invTrade.setYouGotoMoney(true);
+            }
+        }
+    }
+//    @EventHandler
+//    public void onCloseMoneyInventory(InventoryCloseEvent event) {
+//        if (event.getInventory().getTitle().equals("Add Money Trade")) {
+//            Player player = (Player) event.getPlayer();
+//            player.openInventory(MONEY.get(player).getInventory());
+//        }
+//    }
 
     @EventHandler
     public void onClickAtMoneyInventory(InventoryClickEvent event) {
