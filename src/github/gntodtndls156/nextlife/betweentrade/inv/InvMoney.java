@@ -1,6 +1,7 @@
 package github.gntodtndls156.nextlife.betweentrade.inv;
 
 import github.gntodtndls156.nextlife.betweentrade.init.InitButton;
+import github.gntodtndls156.nextlife.betweentrade.init.InitGetLang;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -24,7 +25,7 @@ public class InvMoney {
                 ItemStack item = new ItemStack(Material.GOLD_NUGGET, 1);
                 ItemMeta meta = item.getItemMeta();
 
-                meta.setDisplayName(myMoney + " Coins (SELECTED)");
+                meta.setDisplayName(myMoney + InitGetLang.LANG.get("unit") + " (SELECTED)");
                 meta.setLore(Arrays.asList("You have selected this currency"));
 
                 item.setItemMeta(meta);
@@ -81,7 +82,7 @@ public class InvMoney {
             ItemMeta meta = this.getItemMeta();
             private ItemStack money() {
                 meta.setLore(null);
-                meta.setDisplayName(sum + "Coins");
+                meta.setDisplayName(sum + InitGetLang.LANG.get("unit"));
 
                 this.setItemMeta(meta);
                 return this;

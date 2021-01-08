@@ -1,6 +1,7 @@
 package github.gntodtndls156.nextlife.betweentrade.handle;
 
 import github.gntodtndls156.nextlife.betweentrade.Main;
+import github.gntodtndls156.nextlife.betweentrade.init.InitGetLang;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -33,12 +34,12 @@ public class HandlePlayer implements Listener{
             Player player = event.getPlayer();
             if (player.isSneaking() && event.getHand().equals(EquipmentSlot.HAND)) {
                 if (unNullCheckDENYState(player)) {
-                    player.sendMessage("잠시 후 거래 신청하시오.");
+                    player.sendMessage(InitGetLang.LANG.get("Wait"));
                     return;
                 }
-                player.spigot().sendMessage(new ComponentBuilder(entity.getName()).color(ChatColor.YELLOW).append("에게 거래를 신청했습니다.").create());
+                player.spigot().sendMessage(new ComponentBuilder(String.format(InitGetLang.LANG.get("PlayerProposePlayer"), entity.getName())).color(ChatColor.YELLOW).create());
                 entity.spigot().sendMessage(
-                        new ComponentBuilder(player.getName()).color(ChatColor.YELLOW).append("에게 거래 신청을 받았습니다. ")
+                        new ComponentBuilder(String.format(InitGetLang.LANG.get("GetMessage"), player.getName())).color(ChatColor.YELLOW)
                                 .append("ACCEPT ").color(ChatColor.GREEN).bold(true).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/betweenTrade " + player.getName() + " " + entity.getName())).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("수락").create()))
                                 .append("DENY").color(ChatColor.RED).bold(true).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/betweenTrade " + player.getName() + " deny")).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("거부").create()))
                                 .create()
@@ -47,7 +48,7 @@ public class HandlePlayer implements Listener{
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     try {
                         if (DENYState.get(player)) {
-                            player.sendMessage("상대방이 거래에 응하지 않았습니다.");
+                            player.sendMessage(InitGetLang.LANG.get("DoNotRespond"));
                             DENYState.remove(player);
                         }
                     } catch (NullPointerException exception) {

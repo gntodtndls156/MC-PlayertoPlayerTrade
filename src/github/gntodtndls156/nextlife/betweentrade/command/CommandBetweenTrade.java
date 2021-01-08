@@ -2,6 +2,7 @@ package github.gntodtndls156.nextlife.betweentrade.command;
 
 import github.gntodtndls156.nextlife.betweentrade.handle.HandlePlayer;
 import github.gntodtndls156.nextlife.betweentrade.handle.HandleTrade;
+import github.gntodtndls156.nextlife.betweentrade.init.InitGetLang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,7 +22,7 @@ public class CommandBetweenTrade implements CommandExecutor {
                 }
                 if (strings[1].equals("deny")) {
                     if (OnlinePlayerCheck(strings[0])) {
-                        Bukkit.getPlayer(strings[0]).sendMessage(commandSender.getName() + "가 거래 신청에 대하여 거부하셨습니다.");
+                        Bukkit.getPlayer(strings[0]).sendMessage(String.format(InitGetLang.LANG.get("PlayerDeny"), commandSender.getName()));
                         HandlePlayer.DENYState.remove(Bukkit.getPlayer(strings[0]));
                         return true;
                     }

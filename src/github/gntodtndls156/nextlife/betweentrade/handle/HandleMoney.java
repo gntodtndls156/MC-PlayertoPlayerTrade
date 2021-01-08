@@ -1,6 +1,7 @@
 package github.gntodtndls156.nextlife.betweentrade.handle;
 
 import github.gntodtndls156.nextlife.betweentrade.Main;
+import github.gntodtndls156.nextlife.betweentrade.init.InitGetLang;
 import github.gntodtndls156.nextlife.betweentrade.inv.InvMoney;
 import github.gntodtndls156.nextlife.betweentrade.inv.InvTrade;
 import org.bukkit.Bukkit;
@@ -50,15 +51,16 @@ public class HandleMoney implements Listener {
     @EventHandler
     public void onCloseMoneyInventory(InventoryCloseEvent event) {
         if (event.getInventory().getTitle().equals("Add Money Trade")) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                Player player = (Player) event.getPlayer();
-                try {
-                    player.openInventory(MONEY.get(player).getInventory());
-                } catch (NullPointerException exception) {
-                    // TODO
-                }
-            }, 1L);
-
+            if (!viewState) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                    Player player = (Player) event.getPlayer();
+                    try {
+                        player.openInventory(MONEY.get(player).getInventory());
+                    } catch (NullPointerException exception) {
+                        // TODO
+                    }
+                }, 1L);
+            }
         }
     }
 
@@ -72,7 +74,7 @@ public class HandleMoney implements Listener {
 
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
-            if (item.getItemMeta().getDisplayName().equals("Add to Trade")) {
+            if (item.getItemMeta().getDisplayName().equals(InitGetLang.LANG.get("AddToTrade"))) {
                 player.openInventory(HandleTrade.TRADE.get(HandleTrade.TRADE_KEY.get(player)).getInventory());
                 if (MONEY.get(player).getSum() <= 0) {
                     player.sendMessage("ZERO MONEY");
@@ -87,12 +89,12 @@ public class HandleMoney implements Listener {
                 HandleTrade.TRADE.get(HandleTrade.TRADE_KEY.get(player)).getInventory().setItem(slot, MONEY.get(player).sumToTrade());
                 remove(player);
                 return;
-            } else if (item.getItemMeta().getDisplayName().equals("Type in Value")) {
+            } else if (item.getItemMeta().getDisplayName().equals(InitGetLang.LANG.get("ShowMyMoney"))) {
                 player.closeInventory();
                 player.sendTitle(unit(MONEY.get(player).getMyMoney()), "Left Click to close", 10, 9999, 20);
                 viewState = true;
                 return;
-            } else if (item.getItemMeta().getDisplayName().equals("Back")) {
+            } else if (item.getItemMeta().getDisplayName().equals(InitGetLang.LANG.get("Back"))) {
                 player.openInventory(HandleTrade.TRADE.get(HandleTrade.TRADE_KEY.get(player)).getInventory());
                 remove(player);
                 return;
@@ -142,7 +144,6 @@ public class HandleMoney implements Listener {
 
     @EventHandler
     public void VaultToMoneyInventory(PlayerInteractEvent event) {
-        event.getPlayer().sendMessage(String.valueOf(viewState));
         if (viewState) {
             Player player = event.getPlayer();
             if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.PHYSICAL) {

@@ -2,6 +2,7 @@ package github.gntodtndls156.nextlife.betweentrade.handle;
 
 import github.gntodtndls156.nextlife.betweentrade.Main;
 import github.gntodtndls156.nextlife.betweentrade.init.InitButton;
+import github.gntodtndls156.nextlife.betweentrade.init.InitGetLang;
 import github.gntodtndls156.nextlife.betweentrade.inv.InvTrade;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -157,56 +158,54 @@ public class HandleTrade implements Listener {
                 ItemStack Button = event.getCurrentItem();
                 String Button$name = Button.getItemMeta().getDisplayName();
 
-                switch(Button$name) {
-                    case "거래 잠그기":
-                        for (int i = 0; i < 3; i++) {
-                            int finalI = i;
-                            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                                System.out.println(player);
-                                invTrade.getInventory().setItem(
-                                        invTrade.isPlayer$0Equals(player) ? invTrade.getLineLeft()[finalI] : invTrade.getLineRight()[finalI],
-                                        invTrade.line(12)
-                                );
-                                if (finalI == 2) {
-                                    if (invTrade.isPlayer$0Equals(player)) {
-                                        invTrade.setMeLock(true);
-                                    } else {
-                                        invTrade.setYouLock(true);
-                                    }
-
-                                    if (invTrade.isMeLock() && invTrade.isYouLock()) {
-                                        changeLine(12, event, true);
-                                    }
+                if (Button$name.equals(InitGetLang.LANG.get("Lock"))) {
+                    for (int i = 0; i < 3; i++) {
+                        int finalI = i;
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                            System.out.println(player);
+                            invTrade.getInventory().setItem(
+                                    invTrade.isPlayer$0Equals(player) ? invTrade.getLineLeft()[finalI] : invTrade.getLineRight()[finalI],
+                                    invTrade.line(12)
+                            );
+                            if (finalI == 2) {
+                                if (invTrade.isPlayer$0Equals(player)) {
+                                    invTrade.setMeLock(true);
+                                } else {
+                                    invTrade.setYouLock(true);
                                 }
-                            }, (1 + i) * 7L);
-                        }
-                        break;
-                    case "거래 수락하기":
-                        for (int i = 0; i < 3; i++) {
-                            int finalI = i;
-                            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                                invTrade.getInventory().setItem(
-                                        invTrade.isPlayer$0Equals(player) ? invTrade.getLineLeft()[finalI] : invTrade.getLineRight()[finalI],
-                                        invTrade.line(15)
-                                );
-                                if (finalI == 2) {
-                                    if (invTrade.isPlayer$0Equals(player)) {
-                                        invTrade.setMeAccept(true);
-                                    } else {
-                                        invTrade.setYouAccept(true);
-                                    }
 
-                                    if (invTrade.isMeAccept() && invTrade.isYouAccept()) {
-                                        changeLine(15, event, false);
-                                    }
+                                if (invTrade.isMeLock() && invTrade.isYouLock()) {
+                                    changeLine(12, event, true);
                                 }
-                            }, (i + 1) * 7L);
-                        }
+                            }
+                        }, (1 + i) * 7L);
+                    }
+                } else if (Button$name.equals(InitGetLang.LANG.get("Accept"))) {
+                    for (int i = 0; i < 3; i++) {
+                        int finalI = i;
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                            invTrade.getInventory().setItem(
+                                    invTrade.isPlayer$0Equals(player) ? invTrade.getLineLeft()[finalI] : invTrade.getLineRight()[finalI],
+                                    invTrade.line(15)
+                            );
+                            if (finalI == 2) {
+                                if (invTrade.isPlayer$0Equals(player)) {
+                                    invTrade.setMeAccept(true);
+                                } else {
+                                    invTrade.setYouAccept(true);
+                                }
+
+                                if (invTrade.isMeAccept() && invTrade.isYouAccept()) {
+                                    changeLine(15, event, false);
+                                }
+                            }
+                        }, (i + 1) * 7L);
+                    }
                 }
             }
 
             if (event.getRawSlot() == 45) {
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals("돈 거래")) {
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(InitGetLang.LANG.get("Money"))) {
                     int money = (int) plugin.getEconomy().getBalance(player);
                     if (money <= 0) {
                         player.sendMessage("잔고가 비어있습니다.");
@@ -217,7 +216,7 @@ public class HandleTrade implements Listener {
             }
 
             if (event.getRawSlot() == 47) {
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals("닫기")) {
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(InitGetLang.LANG.get("Close"))) {
                     invTrade.getPlayer$0().closeInventory();
                     invTrade.getPlayer$1().closeInventory();
 

@@ -31,32 +31,32 @@ public class InitButton {
     public ItemStack ButtonLock() {
         switch(number) {
             case 1: // InvTrade
-                return Button("거래 잠그기", new String[] {"이 재화로 거래하자고 제안합니다."}, 14);
+                return Button(InitGetLang.LANG.get("Lock"), new String[] {InitGetLang.LANG.get("LockL")}, 14);
             case 2: // InvTrade
-                return Button("거래 수락하기", new String[] {"최종적으로 거래를 수락합니다.", "상대방도 수락할 경우 거래가 완료됩니다."}, 11);
+                return Button(InitGetLang.LANG.get("Accept"), new String[] {InitGetLang.LANG.get("AcceptL")}, 11);
             case 3: // InvMoney - Back
-                return Button("Back", new String[]{"Click to go back"}, Material.BED);
+                return Button(InitGetLang.LANG.get("Back"), new String[]{InitGetLang.LANG.get("BackL")}, Material.BED);
             case 4: // InvMoney - Type in Value
-                return Button("Type in Value", new String[]{"Click to type in an exact value"}, Material.BED);
+                return Button(InitGetLang.LANG.get("ShowMyMoney"), new String[]{InitGetLang.LANG.get("ShowMyMoneyL")}, Material.BED);
             case 5: // InvMoney
-                return Button("Add " + unit + "Coins",
-                        new String[]{"Click to add more", "", sum + "Coins will be moved in you Inventory", "", "After moving, you balance is " + result},
+                return Button(InitGetLang.LANG.get("Add") + unit + InitGetLang.LANG.get("unit"),
+                        new String[]{InitGetLang.LANG.get("AddL1"), "", String.format(InitGetLang.LANG.get("AddL2"), sum, InitGetLang.LANG.get("unit")), "", String.format(InitGetLang.LANG.get("AddL3"), result, InitGetLang.LANG.get("unit"))},
                         Material.STONE_BUTTON);
             case 6: // InvMoney
-                return Button("Remove " + unit + "Coins",
-                        new String[]{"Click to remove " + sum + "Coins to this trade", "", "Your balance afterwards will be " + result },
+                return Button(InitGetLang.LANG.get("Remove") + unit + InitGetLang.LANG.get("unit"),
+                        new String[]{String.format(InitGetLang.LANG.get("RemoveL2"), sum, InitGetLang.LANG.get("unit")), "", String.format(InitGetLang.LANG.get("RemoveL3"), result, InitGetLang.LANG.get("unit"))},
                         Material.WOOD_BUTTON);
             case 7: // InvMoney - Add to Trade
-                return Button("Add to Trade",
-                        new String[]{"Click to add " + sum + "Coins to this trade", "", "Your balance afterwards will be " + myMoney},
+                return Button(InitGetLang.LANG.get("AddToTrade"),
+                        new String[]{String.format(InitGetLang.LANG.get("AddToTradeL1"), sum, InitGetLang.LANG.get("unit")), "", String.format(InitGetLang.LANG.get("AddToTradeL3"), myMoney, InitGetLang.LANG.get("unit"))},
                         Material.WOOD_AXE);
             case 8: // InvTrade
-                return Button("돈 거래",
-                        new String[]{"돈을 얼만큼 주고 받을지 요구합니다."},
+                return Button(InitGetLang.LANG.get("Money"),
+                        new String[]{InitGetLang.LANG.get("MoneyL")},
                         Material.GOLD_NUGGET);
             case 9: // InvTrade
-                return Button("닫기",
-                        new String[]{"거래를 종료합니다."},
+                return Button(InitGetLang.LANG.get("Close"),
+                        new String[]{InitGetLang.LANG.get("CloseL")},
                         Material.BOAT);
         }
         return new ItemStack(Material.AIR);
