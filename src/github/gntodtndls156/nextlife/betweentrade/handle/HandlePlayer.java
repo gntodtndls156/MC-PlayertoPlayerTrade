@@ -37,9 +37,9 @@ public class HandlePlayer implements Listener{
                     player.sendMessage(InitGetLang.LANG.get("Wait"));
                     return;
                 }
-                player.spigot().sendMessage(new ComponentBuilder(String.format(InitGetLang.LANG.get("PlayerProposePlayer"), entity.getName())).color(ChatColor.YELLOW).create());
+                player.spigot().sendMessage(new ComponentBuilder(String.format(InitGetLang.LANG.get("PlayerProposePlayer"), entity.getName())).create());
                 entity.spigot().sendMessage(
-                        new ComponentBuilder(String.format(InitGetLang.LANG.get("GetMessage"), player.getName())).color(ChatColor.YELLOW)
+                        new ComponentBuilder(String.format(InitGetLang.LANG.get("GetMessage"), player.getName()))
                                 .append("ACCEPT ").color(ChatColor.GREEN).bold(true).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/betweenTrade " + player.getName() + " " + entity.getName())).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("수락").create()))
                                 .append("DENY").color(ChatColor.RED).bold(true).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/betweenTrade " + player.getName() + " deny")).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("거부").create()))
                                 .create()

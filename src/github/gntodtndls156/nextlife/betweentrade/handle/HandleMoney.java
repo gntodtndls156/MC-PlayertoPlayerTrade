@@ -90,9 +90,9 @@ public class HandleMoney implements Listener {
                 remove(player);
                 return;
             } else if (item.getItemMeta().getDisplayName().equals(InitGetLang.LANG.get("ShowMyMoney"))) {
+                viewState = true;
                 player.closeInventory();
                 player.sendTitle(unit(MONEY.get(player).getMyMoney()), "Left Click to close", 10, 9999, 20);
-                viewState = true;
                 return;
             } else if (item.getItemMeta().getDisplayName().equals(InitGetLang.LANG.get("Back"))) {
                 player.openInventory(HandleTrade.TRADE.get(HandleTrade.TRADE_KEY.get(player)).getInventory());

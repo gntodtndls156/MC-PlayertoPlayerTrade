@@ -25,7 +25,11 @@ public class InitButton {
         this.sum = sum;
         this.myMoney = myMoney;
     }
-//    public InitButton(int number, ) {}
+    public InitButton(int number, int sum) {
+        this.sum = sum;
+        this.number = number;
+    }
+//    public InitButton(int number, ) {
 
 
     public ItemStack ButtonLock() {
@@ -58,6 +62,10 @@ public class InitButton {
                 return Button(InitGetLang.LANG.get("Close"),
                         new String[]{InitGetLang.LANG.get("CloseL")},
                         Material.BOAT);
+            case 10: // InvMoney
+                return Button(sum + InitGetLang.LANG.get("unit"),
+                        null,
+                        Material.PAPER);
         }
         return new ItemStack(Material.AIR);
     }
@@ -67,7 +75,9 @@ public class InitButton {
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(name);
-        meta.setLore(Arrays.asList(lore));
+        if (lore != null) {
+            meta.setLore(Arrays.asList(lore));
+        }
 
         item.setItemMeta(meta);
         return item;
