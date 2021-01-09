@@ -7,7 +7,6 @@ import github.gntodtndls156.nextlife.betweentrade.inv.InvTrade;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -22,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HandleMoney implements Listener {
-    private static Map<Player, InvMoney> MONEY = new HashMap<>();
+    public static Map<Player, InvMoney> MONEY = new HashMap<>();
     private Main plugin;
     private boolean viewState = false;
 
@@ -101,7 +100,7 @@ public class HandleMoney implements Listener {
             }
 
             try {
-                int num = Integer.parseInt(item.getItemMeta().getDisplayName().replaceAll("[^0-9]", ""));
+                int num = Integer.parseInt(item.getItemMeta().getDisplayName().replaceAll("§[0-9]", "").replaceAll("[^0-9]", ""));
                 switch(item.getType()) {
                     case STONE_BUTTON:
                         MONEY.get(player).plus(num);

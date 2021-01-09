@@ -6,6 +6,7 @@ import github.gntodtndls156.nextlife.betweentrade.handle.HandlePlayer;
 import github.gntodtndls156.nextlife.betweentrade.handle.HandleTrade;
 import github.gntodtndls156.nextlife.betweentrade.init.InitGetLang;
 import github.gntodtndls156.nextlife.betweentrade.init.InitJsonFile;
+import github.gntodtndls156.nextlife.betweentrade.inv.InvTrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -18,6 +19,16 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         super.onDisable();
+
+        Iterator<InvTrade> invTradeIterator = HandleTrade.TRADE.values().iterator();
+        while (invTradeIterator.hasNext()) {
+            InvTrade invTrade = invTradeIterator.next();
+
+            invTrade.getPlayer$0().closeInventory();
+            invTrade.getPlayer$1().closeInventory();
+
+            new HandleTrade(this).moveItem(invTrade);
+        }
     }
 
     @Override
