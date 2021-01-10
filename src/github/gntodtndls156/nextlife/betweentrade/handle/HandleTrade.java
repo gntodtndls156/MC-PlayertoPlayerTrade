@@ -121,10 +121,9 @@ public class HandleTrade implements Listener {
                     }
                 }
                 if (invTrade.isCloseState()) {
-                    closingFalseViewState(player, invTrade);
                     invTrade.setCloseState(false);
+                    closingFalseViewState(player, invTrade);
                 }
-
                 invTrade.getPlayer$1().closeInventory();
                 invTrade.getPlayer$0().closeInventory();
 
@@ -229,7 +228,10 @@ public class HandleTrade implements Listener {
 
             if (event.getRawSlot() == 47) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(InitGetLang.LANG.get("Close"))) {
-                    closingFalseViewState(player, invTrade);
+                    if (invTrade.isCloseState()) {
+                        invTrade.setCloseState(false);
+                        closingFalseViewState(player, invTrade);
+                    }
 
                     invTrade.getPlayer$0().closeInventory();
                     invTrade.getPlayer$1().closeInventory();
