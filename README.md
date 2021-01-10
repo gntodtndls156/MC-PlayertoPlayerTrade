@@ -1,6 +1,6 @@
 # MC-PlayertoPlayerTrade
 
-개발자: gntodtndls156, 기네스북
+개발자: gntodtndls156, 기네스북  
 버전: 0.2
 
 본 플러그인은 아래와 같은 환경에서 테스트 완료되었으며, 다른 환경에서는 작동되지 않을 수 있습니다.
