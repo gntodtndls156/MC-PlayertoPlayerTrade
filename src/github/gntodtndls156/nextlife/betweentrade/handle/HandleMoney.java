@@ -9,12 +9,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -23,7 +20,6 @@ import java.util.Map;
 public class HandleMoney implements Listener {
     public static Map<Player, InvMoney> MONEY = new HashMap<>();
     private Main plugin;
-    private boolean viewState = false;
 
     public HandleMoney(Player player , int money) {
         InvMoney invMoney = new InvMoney(money);
@@ -50,7 +46,7 @@ public class HandleMoney implements Listener {
     @EventHandler
     public void onCloseMoneyInventory(InventoryCloseEvent event) {
         if (event.getInventory().getTitle().equals("Add Money Trade")) {
-            if (!viewState) {
+            if (MONEY.get(event.getPlayer()).isViewState()) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                     Player player = (Player) event.getPlayer();
                     try {
@@ -88,12 +84,13 @@ public class HandleMoney implements Listener {
                 HandleTrade.TRADE.get(HandleTrade.TRADE_KEY.get(player)).getInventory().setItem(slot, MONEY.get(player).sumToTrade());
                 remove(player);
                 return;
-            } else if (item.getItemMeta().getDisplayName().equals(InitGetLang.LANG.get("ShowMyMoney"))) {
-                viewState = true;
-                player.closeInventory();
-                player.sendTitle(unit(MONEY.get(player).getMyMoney()), "Left Click to close", 10, 9999, 20);
-                return;
+//            } else if (item.getItemMeta().getDisplayName().equals(InitGetLang.LANG.get("ShowMyMoney"))) {
+//                viewState = true;
+//                player.closeInventory();
+//                player.sendTitle(unit(MONEY.get(player).getMyMoney()), "Left Click to close", 10, 9999, 20);
+//                return;
             } else if (item.getItemMeta().getDisplayName().equals(InitGetLang.LANG.get("Back"))) {
+                MONEY.get(player).setViewState(false);
                 player.openInventory(HandleTrade.TRADE.get(HandleTrade.TRADE_KEY.get(player)).getInventory());
                 remove(player);
                 return;
@@ -131,32 +128,32 @@ public class HandleMoney implements Listener {
     private void reload(Player player) {
         MONEY.get(player).button$reset();
     }
-    public String unit(int money) {
-        StringBuffer s =new StringBuffer(String.valueOf(money));
-        s.reverse();
-        for (int i = 0; i < s.length(); i++) {
-            if (i % 3 == 0)
-                s.insert(i, ",");
-        }
-        return s.reverse().toString();
-    }
+//    public String unit(int money) {
+//        StringBuffer s =new StringBuffer(String.valueOf(money));
+//        s.reverse();
+//        for (int i = 0; i < s.length(); i++) {
+//            if (i % 3 == 0)
+//                s.insert(i, ",");
+//        }
+//        return s.reverse().toString();
+//    }
 
-    @EventHandler
-    public void VaultToMoneyInventory(PlayerInteractEvent event) {
-        if (viewState) {
-            Player player = event.getPlayer();
-            if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.PHYSICAL) {
-                player.openInventory(MONEY.get(player).getInventory());
-                player.sendTitle("","",1, 1, 1);
-                viewState = false;
-                return;
-            }
-        }
-    }
-    @EventHandler
-    public void VaultToMoneyInventory(PlayerMoveEvent event) {
-        if (viewState) {
-            event.setCancelled(true);
-        }
-    }
+//    @EventHandler
+//    public void VaultToMoneyInventory(PlayerInteractEvent event) {
+//        if (viewState) {
+//            Player player = event.getPlayer();
+//            if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.PHYSICAL) {
+//                player.openInventory(MONEY.get(player).getInventory());
+//                player.sendTitle("","",1, 1, 1);
+//                viewState = false;
+//                return;
+//            }
+//        }
+//    }
+//    @EventHandler
+//    public void VaultToMoneyInventory(PlayerMoveEvent event) {
+//        if (viewState) {
+//            event.setCancelled(true);
+//        }
+//    }
 }

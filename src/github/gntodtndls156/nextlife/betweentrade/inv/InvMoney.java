@@ -14,6 +14,7 @@ public class InvMoney {
     private Inventory inventory;
     private int myMoney;
     private int sum = 10;
+    private boolean viewState = true;
 
     public InvMoney(int myMoney) {
         this.myMoney = myMoney;
@@ -38,7 +39,7 @@ public class InvMoney {
         // Back
         inventory.setItem(48, new InitButton(3).ButtonLock());
         // Type in Value
-        inventory.setItem(50, new InitButton(4).ButtonLock());
+//        inventory.setItem(50, new InitButton(4).ButtonLock());
     }
 
     public void button$reset() {
@@ -109,5 +110,12 @@ public class InvMoney {
     }
     public void minus(int number) {
         this.sum -= number;
+    }
+
+    public boolean isViewState() {
+        return viewState;
+    }
+    public void setViewState(boolean viewState) {
+        this.viewState = viewState;
     }
 }

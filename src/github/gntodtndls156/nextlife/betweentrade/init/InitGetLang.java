@@ -43,36 +43,32 @@ public class InitGetLang {
                         "\"Line1\": \"경계선\"\n" +
                         "\n" +
                         "\"Accept\": \"거래 수락하기\"\n" +
-                        "\"AcceptL\": |\n" +
-                        "  최종적으로 거래를 수락합니다.\n" +
-                        "  상대방도 수락할 경우 거래가 완료됩니다.\n" +
+                        "\"AcceptL1\": \"최종적으로 거래를 수락합니다.\"\n" +
+                        "\"AcceptL2\": \"상대방도 수락할 경우 거래가 완료됩니다.\"\n" +
                         "\n" +
                         "\"Line2\": \"경계선\"\n" +
                         "\"Money\": \"돈 거래\"\n" +
                         "\"MoneyL\": \"돈을 얼만큼 주고 받을지 요구합니다.\"\n" +
                         "\n" +
                         "# MONEY\n" +
-                        "\"unit\": \"Coins\"\n" +
+                        "\"unit\": \"C\"\n" +
                         "\n" +
-                        "\"Add\": \"Add\"\n" +
-                        "\"AddL1\": \"Click to add more\"\n" +
-                        "\"AddL2\": \"%d%s will be moved in you Inventory\"\n" +
-                        "\"AddL3\": \"After moving, you balance is %d%s\"\n" +
+                        "\"Add\": \"추가 \"\n" +
+                        "\"AddL1\": \"클릭해서 추가합니다.\"\n" +
+                        "\"AddL2\": \"현재 %d%s 로 설정된 상태입니다.\"\n" +
+                        "\"AddL3\": \"거래 성사 이후 예상되는 잔액은 %d%s 입니다.\"\n" +
                         "\n" +
-                        "\"Remove\": \"Remove\"\n" +
-                        "\"RemoveL1\": \"Click to remove more\"\n" +
-                        "\"RemoveL2\": \"Click to remove %d%s to this trade\"\n" +
-                        "\"RemoveL3\": \"Your balance afterwards will be %d%s\"\n" +
+                        "\"Remove\": \"빼기 \"\n" +
+                        "\"RemoveL1\": \"클릭해서 뺍니다.\"\n" +
+                        "\"RemoveL2\": \"현재 %d%s 로 설정된 상태입니다.\"\n" +
+                        "\"RemoveL3\": \"빼고 나서 거래 예정인 금액은 %d%s 입니다.\"\n" +
                         "\n" +
-                        "\"Back\": \"Back\"\n" +
-                        "\"BackL\": \"Click to go back\"\n" +
+                        "\"Back\": \"뒤로가기\"\n" +
+                        "\"BackL\": \"클릭해서 뒤로 갑니다.\"\n" +
                         "\n" +
-                        "\"ShowMyMoney\": \"Type in Value\"\n" +
-                        "\"ShowMyMoneyL\": \"Click to type in an exact value\"\n" +
-                        "\n" +
-                        "\"AddToTrade\": \"Add to Trade\"\n" +
-                        "\"AddToTradeL1\": \"Click To add %d%s to this trade\"\n" +
-                        "\"AddToTradeL3\": \"Your balance afterwards will be %d%s\"";
+                        "\"AddToTrade\": \"이 금액으로 거래하기\"\n" +
+                        "\"AddToTradeL1\": \"클릭하면 %d%s 만큼 거래 테이블에 상정합니다.\"\n" +
+                        "\"AddToTradeL3\": \"거래 성사 이후 예상되는 잔액은 %d%s 입니다.\"";
                 FileWriter fileWriter = new FileWriter(file);
                 fileWriter.write(Context);
                 fileWriter.flush();

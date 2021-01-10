@@ -120,6 +120,11 @@ public class HandleTrade implements Listener {
                         return;
                     }
                 }
+                if (invTrade.isCloseState()) {
+                    closingFalseViewState(player, invTrade);
+                    invTrade.setCloseState(false);
+                }
+
                 invTrade.getPlayer$1().closeInventory();
                 invTrade.getPlayer$0().closeInventory();
 
@@ -129,6 +134,25 @@ public class HandleTrade implements Listener {
                 TRADE_KEY.remove(invTrade.getPlayer$0());
                 TRADE_KEY.remove(invTrade.getPlayer$1());
             }, 5L);
+        }
+    }
+
+    private void closingFalseViewState(Player player, InvTrade invTrade) {
+        try {
+            HandleMoney.MONEY.get(invTrade.getPlayer$0()).setViewState(false);
+        } catch (NullPointerException exception) {
+            // TODO
+        }
+        try {
+            HandleMoney.MONEY.get(invTrade.getPlayer$1()).setViewState(false);
+        } catch (NullPointerException exception) {
+            // TODO
+        }
+
+        if (invTrade.isPlayer$0Equals(player)) {
+            invTrade.getPlayer$1().sendMessage("상대방이 거래 종료했습니다.");
+        } else {
+            invTrade.getPlayer$0().sendMessage("상대방이 거래 종료했습니다.");
         }
     }
 
@@ -205,9 +229,10 @@ public class HandleTrade implements Listener {
 
             if (event.getRawSlot() == 47) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(InitGetLang.LANG.get("Close"))) {
+                    closingFalseViewState(player, invTrade);
+
                     invTrade.getPlayer$0().closeInventory();
                     invTrade.getPlayer$1().closeInventory();
-
                     TRADE.remove(TRADE_KEY.get(player));
                     TRADE_KEY.remove(invTrade.getPlayer$0());
                     TRADE_KEY.remove(invTrade.getPlayer$1());

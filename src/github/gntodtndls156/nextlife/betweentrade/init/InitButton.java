@@ -37,18 +37,18 @@ public class InitButton {
             case 1: // InvTrade
                 return Button(InitGetLang.LANG.get("Lock"), new String[] {InitGetLang.LANG.get("LockL")}, 14);
             case 2: // InvTrade
-                return Button(InitGetLang.LANG.get("Accept"), new String[] {InitGetLang.LANG.get("AcceptL")}, 11);
+                return Button(InitGetLang.LANG.get("Accept"), new String[] {InitGetLang.LANG.get("AcceptL1"), InitGetLang.LANG.get("AcceptL2")}, 11);
             case 3: // InvMoney - Back
                 return Button(InitGetLang.LANG.get("Back"), new String[]{InitGetLang.LANG.get("BackL")}, Material.BED);
-            case 4: // InvMoney - Type in Value
-                return Button(InitGetLang.LANG.get("ShowMyMoney"), new String[]{InitGetLang.LANG.get("ShowMyMoneyL")}, Material.BED);
+//            case 4: // InvMoney - Type in Value
+//                return Button(InitGetLang.LANG.get("ShowMyMoney"), new String[]{InitGetLang.LANG.get("ShowMyMoneyL")}, Material.BED);
             case 5: // InvMoney
                 return Button(InitGetLang.LANG.get("Add") + unit + InitGetLang.LANG.get("unit"),
                         new String[]{InitGetLang.LANG.get("AddL1"), "", String.format(InitGetLang.LANG.get("AddL2"), sum, InitGetLang.LANG.get("unit")), "", String.format(InitGetLang.LANG.get("AddL3"), result, InitGetLang.LANG.get("unit"))},
                         Material.STONE_BUTTON);
             case 6: // InvMoney
                 return Button(InitGetLang.LANG.get("Remove") + unit + InitGetLang.LANG.get("unit"),
-                        new String[]{String.format(InitGetLang.LANG.get("RemoveL2"), sum, InitGetLang.LANG.get("unit")), "", String.format(InitGetLang.LANG.get("RemoveL3"), result, InitGetLang.LANG.get("unit"))},
+                        new String[]{String.format(InitGetLang.LANG.get("RemoveL1")), "", String.format(InitGetLang.LANG.get("RemoveL2"), sum, InitGetLang.LANG.get("unit")), "", String.format(InitGetLang.LANG.get("RemoveL3"), result, InitGetLang.LANG.get("unit"))},
                         Material.WOOD_BUTTON);
             case 7: // InvMoney - Add to Trade
                 return Button(InitGetLang.LANG.get("AddToTrade"),
