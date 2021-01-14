@@ -10,9 +10,7 @@ import org.bukkit.SkullType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -25,6 +23,7 @@ public class HandleTrade implements Listener {
     public static Map<String, InvTrade> TRADE = new HashMap<>();
     public static Map<Player, String> TRADE_KEY = new HashMap<>();
 
+    boolean ShiftClickState = false;
     private InvTrade invTrade;
     private Main plugin;
     public HandleTrade(Main plugin) {
@@ -108,6 +107,10 @@ public class HandleTrade implements Listener {
     @EventHandler
     public void onCloseTradeInventory(InventoryCloseEvent event) {
         if (event.getInventory().getTitle().equals("Player To Player Trade")) {
+            if (ShiftClickState) {
+                ShiftClickState = false;
+                return;
+            }
             Player player = (Player) event.getPlayer();
             InvTrade invTrade = TRADE.get(TRADE_KEY.get(player));
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -159,12 +162,14 @@ public class HandleTrade implements Listener {
     public void onClickAtTradeInventory(InventoryClickEvent event) {
         if (event.getInventory().getTitle().equals("Player To Player Trade")) {
             event.setCancelled(true);
-            if (event.isShiftClick()) {
-                return;
-            }
 
             Player player = (Player) event.getWhoClicked();
             invTrade = TRADE.get(TRADE_KEY.get(player));
+            if (event.isShiftClick()) {
+                ShiftClickState = true;
+                player.openInventory(invTrade.getInventory());
+                return;
+            }
 
             if (event.getRawSlot() == 53) {
                 ItemStack Button = event.getCurrentItem();

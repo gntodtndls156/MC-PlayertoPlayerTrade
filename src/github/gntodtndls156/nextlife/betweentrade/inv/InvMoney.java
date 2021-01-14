@@ -75,7 +75,7 @@ public class InvMoney {
             }
         }
         // Add to Trade
-        inventory.setItem(52, new InitButton(7, sum, myMoney).ButtonLock());
+        inventory.setItem(52, new InitButton(7, sum, myMoney - sum).ButtonLock());
         // show me the sum
         inventory.setItem(13, new InitButton(10, sum).ButtonLock());
     }
