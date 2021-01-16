@@ -1,11 +1,13 @@
 package github.gntodtndls156.nextlife.betweentrade.inv;
 
 import github.gntodtndls156.nextlife.betweentrade.init.InitButton;
+import github.gntodtndls156.nextlife.betweentrade.init.InitGetLang;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class InvTrade {
     private Inventory inventory;
@@ -46,7 +48,12 @@ public class InvTrade {
     }
 
     public ItemStack line(int color) {
-        return new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) color);
+        ItemStack line = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) color);
+        ItemMeta meta = line.getItemMeta();
+        meta.setDisplayName(InitGetLang.LANG.get("Line"));
+        line.setItemMeta(meta);
+
+        return line;
     }
 
     public Inventory getInventory() {

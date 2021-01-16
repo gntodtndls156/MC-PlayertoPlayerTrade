@@ -1,5 +1,6 @@
 package github.gntodtndls156.nextlife.betweentrade.command;
 
+import github.gntodtndls156.nextlife.betweentrade.Main;
 import github.gntodtndls156.nextlife.betweentrade.handle.HandlePlayer;
 import github.gntodtndls156.nextlife.betweentrade.handle.HandleTrade;
 import github.gntodtndls156.nextlife.betweentrade.init.InitGetLang;
@@ -22,7 +23,7 @@ public class CommandBetweenTrade implements CommandExecutor {
                 }
                 if (strings[1].equals("deny")) {
                     if (OnlinePlayerCheck(strings[0])) {
-                        Bukkit.getPlayer(strings[0]).sendMessage(String.format(InitGetLang.LANG.get("PlayerDeny"), commandSender.getName()));
+                        Bukkit.getPlayer(strings[0]).sendMessage(Main.NAME + String.format(InitGetLang.LANG.get("PlayerDeny"), commandSender.getName()));
                         HandlePlayer.DENYState.remove(Bukkit.getPlayer(strings[0]));
                         return true;
                     }

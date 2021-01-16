@@ -72,12 +72,12 @@ public class HandleMoney implements Listener {
             if (item.getItemMeta().getDisplayName().equals(InitGetLang.LANG.get("AddToTrade"))) {
                 player.openInventory(HandleTrade.TRADE.get(HandleTrade.TRADE_KEY.get(player)).getInventory());
                 if (MONEY.get(player).getSum() <= 0) {
-                    player.sendMessage("ZERO MONEY");
+                    player.sendMessage(Main.NAME + "ZERO MONEY");
                     return;
                 }
                 int slot = addSlotMoney(player);
                 if (slot == -1) {
-                    player.sendMessage("FULL SLOT");
+                    player.sendMessage(Main.NAME + "FULL SLOT");
                     return;
                 }
                 plugin.getEconomy().withdrawPlayer(player, MONEY.get(player).getSum());

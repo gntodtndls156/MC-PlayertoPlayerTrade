@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Iterator;
 
 public class Main extends JavaPlugin {
+    public static String NAME = "[PTPTrade] ";
 
     @Override
     public void onDisable() {

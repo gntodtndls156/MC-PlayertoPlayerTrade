@@ -152,9 +152,9 @@ public class HandleTrade implements Listener {
         }
 
         if (invTrade.isPlayer$0Equals(player)) {
-            invTrade.getPlayer$1().sendMessage("상대방이 거래 종료했습니다.");
+            invTrade.getPlayer$1().sendMessage(Main.NAME + "상대방이 거래 종료했습니다.");
         } else {
-            invTrade.getPlayer$0().sendMessage("상대방이 거래 종료했습니다.");
+            invTrade.getPlayer$0().sendMessage(Main.NAME + "상대방이 거래 종료했습니다.");
         }
     }
 
@@ -224,7 +224,7 @@ public class HandleTrade implements Listener {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(InitGetLang.LANG.get("Money"))) {
                     int money = (int) plugin.getEconomy().getBalance(player);
                     if (money <= 0) {
-                        player.sendMessage("잔고가 비어있습니다.");
+                        player.sendMessage(Main.NAME + "잔고가 비어있습니다.");
                         return;
                     }
                     new HandleMoney(player, money);

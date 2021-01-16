@@ -34,12 +34,12 @@ public class HandlePlayer implements Listener{
             Player player = event.getPlayer();
             if (player.isSneaking() && event.getHand().equals(EquipmentSlot.HAND)) {
                 if (unNullCheckDENYState(player)) {
-                    player.sendMessage(InitGetLang.LANG.get("Wait"));
+                    player.sendMessage(Main.NAME + InitGetLang.LANG.get("Wait"));
                     return;
                 }
-                player.spigot().sendMessage(new ComponentBuilder(String.format(InitGetLang.LANG.get("PlayerProposePlayer"), entity.getName())).create());
+                player.spigot().sendMessage(new ComponentBuilder(Main.NAME + String.format(InitGetLang.LANG.get("PlayerProposePlayer"), entity.getName())).create());
                 entity.spigot().sendMessage(
-                        new ComponentBuilder(String.format(InitGetLang.LANG.get("GetMessage"), player.getName()))
+                        new ComponentBuilder(Main.NAME + String.format(InitGetLang.LANG.get("GetMessage"), player.getName()))
                                 .append("ACCEPT ").color(ChatColor.GREEN).bold(true).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/betweenTrade " + player.getName() + " " + entity.getName())).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("수락").create()))
                                 .append("DENY").color(ChatColor.RED).bold(true).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/betweenTrade " + player.getName() + " deny")).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("거부").create()))
                                 .create()
@@ -48,7 +48,7 @@ public class HandlePlayer implements Listener{
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     try {
                         if (DENYState.get(player)) {
-                            player.sendMessage(InitGetLang.LANG.get("DoNotRespond"));
+                            player.sendMessage(Main.NAME + InitGetLang.LANG.get("DoNotRespond"));
                             DENYState.remove(player);
                         }
                     } catch (NullPointerException exception) {
