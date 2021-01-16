@@ -20,8 +20,7 @@
 
 테스트에 협조해주신 기네스그룹 소드 아트 온라인 프로젝트 서버에 감사드립니다.
 
-시연 영상은 아래와 같습니다.
-<iframe width="560" height="315" src="https://www.youtube.com/embed/XId5P4knvMU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+시연 영상 주소: [Youtube Video](https://www.youtube.com/embed/XId5P4knvMU)
 
 본 플러그인은 오픈소스로, 누구나 자유로이 다운로드할 수 있으며, 소스 수정이 가능합니다.  
 또한, 피드백과 버그 사항 등 깃허브 이슈를 통해 알려주시면 빠르게 업데이트 하겠습니다.
